@@ -1,8 +1,41 @@
 #include <time.h>
+#include <stdbool.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "agent.h"
+
+typedef struct s_brains {
+	char	dir;
+	bool	hasflower;
+}	t_brains;
+
+t_brains	brains[5];
+
+void	init_brains(agent_info_t *info)
+{
+	int	i = 0;
+	char	dir;
+
+	if (info->player == 0)
+		dir = E;
+	else
+		dir = W;
+	while (i != 5)
+	{
+		brains[i].dir = dir;
+		brains[i].hasflower = false;
+		i++;
+	}
+}
+
+void	goback(agent_info_t *info)
+{
+	if (brains[info->bee].dir == E)
+		brains[info->bee].dir = W;
+	else
+		brains[info->bee].dir = E;
+}
 
 int find_neighbour(agent_info_t info, cell_t type)
 {
@@ -25,7 +58,7 @@ command_t think(agent_info_t info)
 {
     cell_t bee = info.cells[VIEW_DISTANCE][VIEW_DISTANCE];
 
-    static int toggle = 0;
+    init_brains(&info);
     if (is_bee_with_flower(bee))
     {
         int hive_dir = find_neighbour(info, hive_cell(info.player));
@@ -42,32 +75,21 @@ command_t think(agent_info_t info)
         int flower_dir = find_neighbour(info, FLOWER);
         if (flower_dir >= 0)
         {
+		goback(&info);
             return (command_t) {
                 .action = FORAGE,
                 .direction = flower_dir
             };
         }
+
     }
-        int outside_dir = find_neighbour(info, OUTSIDE);
-        if (outside_dir >= 0)
-	{
-		if (toggle == 1)
-			toggle = 0;
-		else
-			toggle = 1;
-	}
-    if (toggle == 1)
-    {
-	    return (command_t) {
-		.action = MOVE,
-                .direction = W
-	    };
-    }
-    else
-	    return (command_t) {
-		.action = MOVE,
-		.direction = E
-	    };
+    int outside_dir = find_neighbour(info, OUTSIDE);
+    if (outside_dir >= 0)
+	goback(&info);
+    return (command_t) {
+	.action = MOVE,
+	.direction = brains[info.bee].dir
+    };
 }
 
 int main(int argc, char **argv)
