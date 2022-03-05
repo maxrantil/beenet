@@ -8,7 +8,7 @@ typedef struct
 {
 	char	**map;
 	int		confirmed_score;
-}		t_game;
+}	t_game;
 
 typedef struct s_brains {
 	char	dir;

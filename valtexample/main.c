@@ -173,7 +173,7 @@ command_t think(agent_info_t info)
 int main(int argc, char **argv)
 {
 	game = init_game();
-	
+
     init_brains();
     if (argc < 3)
         panic("Usage: ./agent arena_host arena_ip");
