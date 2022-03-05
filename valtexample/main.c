@@ -50,6 +50,64 @@ void	goback(agent_info_t *info)
 		brains[info->bee].dir = E;
 }
 
+char	enum_to_str(cell_t type, int player)
+{
+	if (type == EMPTY)
+		return ('.');
+	else if (type == FLOWER)
+		return ('F');
+	else if (type == WALL)
+		return ('W');
+	else if (type == OUTSIDE)
+		return (NULL);
+	
+	if (player == 0)
+	{
+		if (type == BEE_0)
+			retutn ('B');
+		else if (type == BEE_1)
+			return ('E');
+		else if (type == BEE_0_WITH_FLOWER)
+			return ('b');
+		else if (type == BEE_1_WITH_FLOWER)
+			return ('e');
+		else if (type == HIVE_0)
+			return ('H');
+		else if (type == HIVE_1)
+			return ('h');
+	} else if (player == 1)
+	{
+		if (type == BEE_1)
+			return ('B');
+		else if (type == BEE_0)
+			return ('E');
+		else if (type == BEE_1_WITH_FLOWER)
+			return ('b');
+		else if (type == BEE_0_WITH_FLOWER)
+			return ('e');
+		else if (type == HIVE_1)
+			return ('H');
+		else if (type == HIVE_0)
+			return ('h');
+	}
+}
+
+void	update_map(t_game *game, agent_info_t info)
+{
+	char c;
+
+	coords_t center = {VIEW_DISTANCE, VIEW_DISTANCE};
+	coords_t bee = {info.row, info.col};
+	game->map[info.row][info.col] = 'B';
+	for (int dir = 0; dir < 8; dir++)
+	{
+		coords_t gcoords = direction_to_coords(bee, dir);
+		coords_t coords = direction_to_coords(center, dir);
+		if (c = enum_to_str(info.cells[coords.row][coords.col], info.player))
+			game->map[gcoords.row][gcoords.col] = c;
+	}
+}
+
 int find_neighbour(agent_info_t info, cell_t type)
 {
     coords_t center = {VIEW_DISTANCE, VIEW_DISTANCE};
@@ -67,9 +125,10 @@ int find_neighbour(agent_info_t info, cell_t type)
     return -1;
 }
 
-command_t think(agent_info_t info)
+command_t think(agent_info_t info, t_game *game)
 {
     cell_t bee = info.cells[VIEW_DISTANCE][VIEW_DISTANCE];
+	update_map(game, info);
 
     if (is_bee_with_flower(bee))
     {
@@ -107,6 +166,9 @@ command_t think(agent_info_t info)
 
 int main(int argc, char **argv)
 {
+	static t_game *game;
+
+	game = init_game();
     init_brains();
     if (argc < 3)
         panic("Usage: ./agent arena_host arena_ip");
