@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "agent.h"
+#include "beenet.h"
 
 t_brains	brains[5];
 
@@ -55,11 +56,11 @@ char	enum_to_str(cell_t type, int player)
 		return ('W');
 	else if (type == OUTSIDE)
 		return (NULL);
-	
+
 	if (player == 0)
 	{
 		if (type == BEE_0)
-			retutn ('B');
+			return ('B');
 		else if (type == BEE_1)
 			return ('E');
 		else if (type == BEE_0_WITH_FLOWER)
