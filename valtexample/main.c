@@ -7,21 +7,21 @@
 #include "beenet.h"
 
 t_brains	brains[5];
-
-t_game	*init_game()
+t_game 		game;
+t_game	init_game()
 {
 	t_game *game;
 
-	game = (t_game*)malloc(sizeof(t_game));
-	game->map = (char **)malloc(sizeof(char*) * ROWS);
-	for (int i = 0; i < ROWS; i++)
+	game = (t_game *)malloc(sizeof(t_game));
+	game->map = (char **)malloc(sizeof(char*) * ROWS + 1);
+	for (int i = 0; i < ROWS + 1; i++)
 	{
-		game->map[i] = (char *)malloc(sizeof(char) * COLUMNS);
-		for (int j = 0; j < COLUMNS; j++)
+		game->map[i] = (char *)malloc(sizeof(char) * COLUMNS + 1);
+		for (int j = 0; j < COLUMNS + 1; j++)
 			game->map[i][j] = '#';
 	}
 	game->confirmed_score = 0;
-	return (game);
+	return (*game);
 }
 
 void	init_brains()
@@ -55,7 +55,7 @@ char	enum_to_str(cell_t type, int player)
 	else if (type == WALL)
 		return ('W');
 	else if (type == OUTSIDE)
-		return (NULL);
+		return ('0');
 
 	if (player == 0)
 	{
@@ -86,28 +86,26 @@ char	enum_to_str(cell_t type, int player)
 		else if (type == HIVE_0)
 			return ('h');
 	}
+	return ('X');
 }
 
-void	update_map(t_game *game, agent_info_t info)
+void	update_map(t_game game, agent_info_t info)
 {
-	char c;
-
 	coords_t center = {VIEW_DISTANCE, VIEW_DISTANCE};
 	coords_t bee = {info.row, info.col};
-	game->map[info.row][info.col] = 'B';
+	game.map[info.row][info.col] = enum_to_str(info.cells[center.row][center.col], info.player);
 	for (int dir = 0; dir < 8; dir++)
 	{
 		coords_t gcoords = direction_to_coords(bee, dir);
 		coords_t coords = direction_to_coords(center, dir);
-		if (c = enum_to_str(info.cells[coords.row][coords.col], info.player))
-			game->map[gcoords.row][gcoords.col] = c;
+		game.map[gcoords.row][gcoords.col] = enum_to_str(info.cells[coords.row][coords.col], info.player);
 	}
 }
 
-void	print_map(t_game *game)
+void	print_map(t_game game)
 {
 	for (int i = 0; i < ROWS; i++)
-		printf("%.30s\n", game->map[i]);
+		printf("%.30s\n", game.map[i]);
 }
 
 int find_neighbour(agent_info_t info, cell_t type)
@@ -127,11 +125,13 @@ int find_neighbour(agent_info_t info, cell_t type)
     return -1;
 }
 
-command_t think(agent_info_t info, t_game *game)
+
+
+command_t think(agent_info_t info)
 {
     cell_t bee = info.cells[VIEW_DISTANCE][VIEW_DISTANCE];
 	update_map(game, info);
-
+	print_map(game);
     if (is_bee_with_flower(bee))
     {
         int hive_dir = find_neighbour(info, hive_cell(info.player));
@@ -168,8 +168,6 @@ command_t think(agent_info_t info, t_game *game)
 
 int main(int argc, char **argv)
 {
-	static t_game *game;
-
 	game = init_game();
     init_brains();
     if (argc < 3)
