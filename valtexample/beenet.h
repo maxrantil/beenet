@@ -10,4 +10,10 @@ typedef struct
 	int		confirmed_score;
 }		t_game;
 
+typedef struct s_brains {
+	char	dir;
+	bool	hasflower;
+}	t_brains;
+
 #endif
+

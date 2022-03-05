@@ -5,11 +5,6 @@
 #include <stdio.h>
 #include "agent.h"
 
-typedef struct s_brains {
-	char	dir;
-	bool	hasflower;
-}	t_brains;
-
 t_brains	brains[5];
 
 t_game	*init_game()
