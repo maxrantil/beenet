@@ -2,7 +2,7 @@
 #define BEENET_H
 
 #define ROWS 25
-#define COLUMNS 35
+#define COLUMNS 30
 
 typedef struct
 {

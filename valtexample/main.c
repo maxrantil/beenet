@@ -8,7 +8,8 @@
 
 t_brains	brains[5];
 t_game 		game;
-t_game	init_game()
+
+t_game		init_game()
 {
 	t_game *game;
 
@@ -26,7 +27,7 @@ t_game	init_game()
 
 void	init_brains()
 {
-	int	i = 0;
+	int		i = 0;
 	char	dir;
 
 	dir = E;
@@ -71,7 +72,8 @@ char	enum_to_str(cell_t type, int player)
 			return ('H');
 		else if (type == HIVE_1)
 			return ('h');
-	} else if (player == 1)
+	}
+	else if (player == 1)
 	{
 		if (type == BEE_1)
 			return ('B');
@@ -93,6 +95,7 @@ void	update_map(t_game game, agent_info_t info)
 {
 	coords_t center = {VIEW_DISTANCE, VIEW_DISTANCE};
 	coords_t bee = {info.row, info.col};
+
 	game.map[info.row][info.col] = enum_to_str(info.cells[center.row][center.col], info.player);
 	for (int dir = 0; dir < 8; dir++)
 	{
@@ -130,6 +133,7 @@ int find_neighbour(agent_info_t info, cell_t type)
 command_t think(agent_info_t info)
 {
     cell_t bee = info.cells[VIEW_DISTANCE][VIEW_DISTANCE];
+
 	update_map(game, info);
 	print_map(game);
     if (is_bee_with_flower(bee))
@@ -159,16 +163,17 @@ command_t think(agent_info_t info)
     }
     int outside_dir = find_neighbour(info, OUTSIDE);
     if (outside_dir >= 0)
-	goback(&info);
+		goback(&info);
     return (command_t) {
-	.action = MOVE,
-	.direction = brains[info.bee].dir
+		.action = MOVE,
+		.direction = brains[info.bee].dir
     };
 }
 
 int main(int argc, char **argv)
 {
 	game = init_game();
+	
     init_brains();
     if (argc < 3)
         panic("Usage: ./agent arena_host arena_ip");
