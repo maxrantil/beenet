@@ -12,15 +12,12 @@ typedef struct s_brains {
 
 t_brains	brains[5];
 
-void	init_brains(agent_info_t *info)
+void	init_brains()
 {
 	int	i = 0;
 	char	dir;
 
-	if (info->player == 0)
-		dir = E;
-	else
-		dir = W;
+	dir = E;
 	while (i != 5)
 	{
 		brains[i].dir = dir;
@@ -58,7 +55,6 @@ command_t think(agent_info_t info)
 {
     cell_t bee = info.cells[VIEW_DISTANCE][VIEW_DISTANCE];
 
-    init_brains(&info);
     if (is_bee_with_flower(bee))
     {
         int hive_dir = find_neighbour(info, hive_cell(info.player));
@@ -73,9 +69,10 @@ command_t think(agent_info_t info)
     else
     {
         int flower_dir = find_neighbour(info, FLOWER);
-        if (flower_dir >= 0)
+        if (flower_dir >= 0 && brains[info.bee].hasflower == false)
         {
 		goback(&info);
+		brains[info.bee].hasflower = true;
             return (command_t) {
                 .action = FORAGE,
                 .direction = flower_dir
@@ -94,6 +91,7 @@ command_t think(agent_info_t info)
 
 int main(int argc, char **argv)
 {
+    init_brains();
     if (argc < 3)
         panic("Usage: ./agent arena_host arena_ip");
 
