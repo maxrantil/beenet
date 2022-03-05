@@ -104,6 +104,12 @@ void	update_map(t_game *game, agent_info_t info)
 	}
 }
 
+void	print_map(t_game *game)
+{
+	for (int i = 0; i < ROWS; i++)
+		printf("%.30s\n", game->map[i]);
+}
+
 int find_neighbour(agent_info_t info, cell_t type)
 {
     coords_t center = {VIEW_DISTANCE, VIEW_DISTANCE};
