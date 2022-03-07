@@ -9,6 +9,12 @@
 t_brains	brains[5];
 t_game 		game;
 
+dir_t	get_player_dir(dir_t dir, agent_info_t *info)
+{
+	dir = dir + (flag_dir[dir] * (info->player == 1));
+	return (dir);
+}
+
 t_game		init_game()
 {
 	t_game *game;
@@ -128,12 +134,10 @@ int find_neighbour(agent_info_t info, cell_t type)
     return -1;
 }
 
-
-
 command_t think(agent_info_t info)
 {
     cell_t bee = info.cells[VIEW_DISTANCE][VIEW_DISTANCE];
-
+	
 	update_map(game, info);
 	print_map(game);
     if (is_bee_with_flower(bee))
@@ -168,13 +172,18 @@ command_t think(agent_info_t info)
 		.action = MOVE,
 		.direction = brains[info.bee].dir
     };
+
+	return (command_t) {
+		.action = MOVE,
+		.direction = get_player_dir(E, &info)
+	};
 }
 
 int main(int argc, char **argv)
 {
 	game = init_game();
 
-    init_brains();
+   // init_brains();
     if (argc < 3)
         panic("Usage: ./agent arena_host arena_ip");
 

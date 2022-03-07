@@ -15,5 +15,16 @@ typedef struct s_brains {
 	bool	hasflower;
 }	t_brains;
 
+static const int flag_dir[8] = { 
+	0, 
+	6, 
+	4, 
+	2, 
+	0, 
+	-2, 
+	-4, 
+	-6 
+};
+
 #endif
 
