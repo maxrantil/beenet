@@ -111,6 +111,30 @@ void	update_map(t_game game, agent_info_t info)
 	}
 }
 
+void	findhive(agent_info_t info)
+{
+	int	x, y;
+	y = 0;
+
+	while (y != ROWS - 1)
+	{
+		if (x == COLUMNS - 1)
+			x = 0, y++;
+		if (info.player == 1)
+			if (game.map[y][x] == 'H')
+				break ;
+		if (info.player == 0)
+			if (game.map[y][x] == 'h')
+				break ;
+		x++;
+	}
+	for (int i = 0 ; i != 5 ; i++)
+	{
+		brains[i].hivelocation.col = x;
+		brains[i].hivelocation.row = y;
+	}
+}
+
 void	print_map(t_game game)
 {
 	for (int i = 0; i < ROWS; i++)
@@ -130,16 +154,17 @@ int find_neighbour(agent_info_t info, cell_t type)
             return dir;
         }
     }
-
     return -1;
 }
 
 command_t think(agent_info_t info)
 {
     cell_t bee = info.cells[VIEW_DISTANCE][VIEW_DISTANCE];
-	
+
 	update_map(game, info);
 	print_map(game);
+	findhive(info);
+	printf("%d\n %d\n", brains[info.bee].hivelocation.col, brains[info.bee].hivelocation.row);
     if (is_bee_with_flower(bee))
     {
         int hive_dir = find_neighbour(info, hive_cell(info.player));
@@ -156,7 +181,6 @@ command_t think(agent_info_t info)
         int flower_dir = find_neighbour(info, FLOWER);
         if (flower_dir >= 0 && brains[info.bee].hasflower == false)
         {
-		goback(&info);
 		brains[info.bee].hasflower = true;
             return (command_t) {
                 .action = FORAGE,
@@ -165,14 +189,6 @@ command_t think(agent_info_t info)
         }
 
     }
-    int outside_dir = find_neighbour(info, OUTSIDE);
-    if (outside_dir >= 0)
-		goback(&info);
-    return (command_t) {
-		.action = MOVE,
-		.direction = brains[info.bee].dir
-    };
-
 	return (command_t) {
 		.action = MOVE,
 		.direction = get_player_dir(E, &info)
@@ -183,7 +199,7 @@ int main(int argc, char **argv)
 {
 	game = init_game();
 
-   // init_brains();
+    init_brains();
     if (argc < 3)
         panic("Usage: ./agent arena_host arena_ip");
 
@@ -195,4 +211,15 @@ int main(int argc, char **argv)
 
     agent_main(host, port, team_name, think);
 }
+
+/*
+    int outside_dir = find_neighbour(info, OUTSIDE);
+    if (outside_dir >= 0)
+		goback(&info);
+    return (command_t) {
+		.action = MOVE,
+		.direction = brains[info.bee].dir
+    };
+
+    */
 

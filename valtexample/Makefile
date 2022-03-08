@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -O3 -flto
+CFLAGS= -O3 -flto
 CPPFLAGS=-I../src
 LDFLAGS=-flto -L../bin -lagent
 
