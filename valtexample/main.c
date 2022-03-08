@@ -121,7 +121,7 @@ void	update_map(t_game game, agent_info_t info)
 	}
 }
 
-void	print_map(t_game game)
+/* void	print_map(t_game game)
 {
 	for (int i = 0; i < ROWS; i++)
 	{
@@ -131,7 +131,7 @@ void	print_map(t_game game)
 		}
 		write(1, "\n", 1);
 	}
-}
+} */
 
 int find_neighbour(agent_info_t info, cell_t type)
 {
@@ -153,8 +153,8 @@ command_t think(agent_info_t info)
     cell_t bee = info.cells[VIEW_DISTANCE][VIEW_DISTANCE];
 
 	update_map(game, info);
-	print_map(game);
-	printf("row: %d\n col: %d\n", game.hivecords.row, game.hivecords.col);
+	//print_map(game);
+	//printf("row: %d\n col: %d\n", game.hivecords.row, game.hivecords.col);
     if (is_bee_with_flower(bee))
     {
         int hive_dir = find_neighbour(info, hive_cell(info.player));
@@ -254,9 +254,13 @@ command_t think(agent_info_t info)
 				};
 		}
 	}
+	int go_way = rand() % 8;
+
+	if (go_way == W)
+		go_way = E;
 	return (command_t) {
 		.action = MOVE,
-		.direction = get_player_dir(rand() % 8, &info)
+		.direction = get_player_dir(go_way, &info)
 	};
 }
 
@@ -272,7 +276,7 @@ int main(int argc, char **argv)
 
     char *host = argv[1];
     int port = atoi(argv[2]);
-    char *team_name = "example_agent";
+    char *team_name = "Beenet";
 
     agent_main(host, port, team_name, think);
 }
