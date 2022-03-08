@@ -8,6 +8,7 @@ typedef struct
 {
 	char	**map;
 	int		confirmed_score;
+	coords_t	hivecords;
 }	t_game;
 
 typedef struct s_brains {

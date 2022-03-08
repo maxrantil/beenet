@@ -53,7 +53,7 @@ void	goback(agent_info_t *info)
 		brains[info->bee].dir = E;
 }
 
-char	enum_to_str(cell_t type, int player)
+char	enum_to_str(cell_t type, int player, coords_t cords, agent_info_t info)
 {
 	if (type == EMPTY)
 		return ('.');
@@ -75,7 +75,10 @@ char	enum_to_str(cell_t type, int player)
 		else if (type == BEE_1_WITH_FLOWER)
 			return ('e');
 		else if (type == HIVE_0)
+		{
+			game.hivecords = cords;
 			return ('H');
+		}
 		else if (type == HIVE_1)
 			return ('h');
 	}
@@ -90,7 +93,10 @@ char	enum_to_str(cell_t type, int player)
 		else if (type == BEE_0_WITH_FLOWER)
 			return ('e');
 		else if (type == HIVE_1)
+		{
+			game.hivecords = cords;
 			return ('H');
+		}
 		else if (type == HIVE_0)
 			return ('h');
 	}
@@ -102,32 +108,16 @@ void	update_map(t_game game, agent_info_t info)
 	coords_t center = {VIEW_DISTANCE, VIEW_DISTANCE};
 	coords_t bee = {info.row, info.col};
 
-	game.map[info.row][info.col] = enum_to_str(info.cells[center.row][center.col], info.player);
+	game.map[info.row][info.col] = enum_to_str(info.cells[center.row][center.col], info.player, bee, info);
 	for (int dir = 0; dir < 8; dir++)
 	{
 		coords_t gcoords = direction_to_coords(bee, dir);
 		coords_t coords = direction_to_coords(center, dir);
-		game.map[gcoords.row][gcoords.col] = enum_to_str(info.cells[coords.row][coords.col], info.player);
-	}
-}
-
-void	findhive(agent_info_t info)
-{
-	coords_t coord = { 1, 0 };
-
-	while (coord.row != ROWS)
-	{
-		if (coord.col == COLUMNS)
-			coord.col = 0, coord.row++;
-		if (info.player == 1)
-			if (game.map[coord.col][coord.row] == 'H')
-				break ;
-		coord.col++;
-	}
-	for (int i = 0 ; i != 5 ; i++)
-	{
-		brains[i].hivelocation.col = coord.col;
-		brains[i].hivelocation.row = coord.row;
+		game.map[gcoords.row][gcoords.col] = enum_to_str(
+				info.cells[coords.row][coords.col],
+				info.player,
+				gcoords,
+				info);
 	}
 }
 
@@ -165,8 +155,7 @@ command_t think(agent_info_t info)
 
 	update_map(game, info);
 	print_map(game);
-	findhive(info);
-	printf("%d\n %d\n", brains[info.bee].hivelocation.col, brains[info.bee].hivelocation.row);
+	printf("row: %d\n col: %d\n", game.hivecords.row, game.hivecords.col);
     if (is_bee_with_flower(bee))
     {
         int hive_dir = find_neighbour(info, hive_cell(info.player));
