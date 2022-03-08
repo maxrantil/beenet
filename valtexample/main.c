@@ -20,11 +20,11 @@ t_game		init_game()
 	t_game *game;
 
 	game = (t_game *)malloc(sizeof(t_game));
-	game->map = (char **)malloc(sizeof(char*) * ROWS + 1);
-	for (int i = 0; i < ROWS + 1; i++)
+	game->map = (char **)malloc(sizeof(char*) * ROWS);
+	for (int i = 0; i < ROWS; i++)
 	{
-		game->map[i] = (char *)malloc(sizeof(char) * COLUMNS + 1);
-		for (int j = 0; j < COLUMNS + 1; j++)
+		game->map[i] = (char *)malloc(sizeof(char) * COLUMNS);
+		for (int j = 0; j < COLUMNS; j++)
 			game->map[i][j] = '#';
 	}
 	game->confirmed_score = 0;
@@ -113,25 +113,21 @@ void	update_map(t_game game, agent_info_t info)
 
 void	findhive(agent_info_t info)
 {
-	int	x, y;
-	y = 0;
+	coords_t coord = { 1, 0 };
 
-	while (y != ROWS - 1)
+	while (coord.row != ROWS)
 	{
-		if (x == COLUMNS - 1)
-			x = 0, y++;
+		if (coord.col == COLUMNS)
+			coord.col = 0, coord.row++;
 		if (info.player == 1)
-			if (game.map[y][x] == 'H')
+			if (game.map[coord.col][coord.row] == 'H')
 				break ;
-		if (info.player == 0)
-			if (game.map[y][x] == 'h')
-				break ;
-		x++;
+		coord.col++;
 	}
 	for (int i = 0 ; i != 5 ; i++)
 	{
-		brains[i].hivelocation.col = x;
-		brains[i].hivelocation.row = y;
+		brains[i].hivelocation.col = coord.col;
+		brains[i].hivelocation.row = coord.row;
 	}
 }
 
