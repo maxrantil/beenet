@@ -183,8 +183,13 @@ command_t think(agent_info_t info)
 	{
 		if (info.player == 0)
 		{
-/* 			if (info.col > game.hivecords.col)
-			if (info.crow > game.hivecords.row) */
+			if (info.row < game.hivecords.row && info.col > 1)
+			{
+				return (command_t) {
+					.action = MOVE,
+					.direction = SW
+				};
+			}
 			if (info.col == game.hivecords.col && info.row < 12)
 			{
 				return (command_t) {
@@ -192,7 +197,14 @@ command_t think(agent_info_t info)
 					.direction = S
 				};
 			}
-			if (info.col== game.hivecords.col&& info.row > 12)
+			if (info.row > game.hivecords.row && info.col > 1)
+			{
+				return (command_t) {
+					.action = MOVE,
+					.direction = NW
+				};
+			}
+			if (info.col == game.hivecords.col && info.row > 12)
 			{
 				return (command_t) {
 					.action = MOVE,
@@ -207,11 +219,25 @@ command_t think(agent_info_t info)
 		}
 		else
 		{
+			if (info.row < game.hivecords.row && info.col < 28)
+			{
+				return (command_t) {
+					.action = MOVE,
+					.direction = SE
+				};
+			}
 			if (info.col == game.hivecords.col && info.row < 12)
 			{
 				return (command_t) {
 					.action = MOVE,
 					.direction = S
+				};
+			}
+			if (info.row < game.hivecords.row && info.col < 28)
+			{
+				return (command_t) {
+					.action = MOVE,
+					.direction = NE
 				};
 			}
 			if (info.col == game.hivecords.col && info.row > 12)
