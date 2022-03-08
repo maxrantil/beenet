@@ -14,8 +14,6 @@ typedef struct
 typedef struct s_brains {
 	char	dir;
 	bool	hasflower;
-	coords_t	hivelocation;
-	char	path[1000]; //remember the task
 }	t_brains;
 
 static const int flag_dir[8] = {
