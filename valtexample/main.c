@@ -181,6 +181,15 @@ command_t think(agent_info_t info)
     }
 	if (brains[info.bee].hasflower == true)
 	{
+		int obstacle;
+			obstacle = find_neighbour(info, FLOWER);
+			if (obstacle >= 0)
+			{
+				return (command_t) {
+					.action = MOVE,
+					.direction = rand() % 8
+				};
+			}
 		if (info.player == 0)
 		{
 			if (info.row < game.hivecords.row && info.col > 1)
