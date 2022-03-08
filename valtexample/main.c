@@ -129,7 +129,7 @@ void	print_map(t_game game)
 		{
 			write(1, &game.map[i][j], 1);
 		}
-		write(1, '\n', 1);
+		write(1, "\n", 1);
 	}
 }
 
@@ -172,13 +172,12 @@ command_t think(agent_info_t info)
         int flower_dir = find_neighbour(info, FLOWER);
         if (flower_dir >= 0 && brains[info.bee].hasflower == false)
         {
-		brains[info.bee].hasflower = true;
+			brains[info.bee].hasflower = true;
             return (command_t) {
                 .action = FORAGE,
                 .direction = flower_dir
             };
         }
-
     }
 	return (command_t) {
 		.action = MOVE,
