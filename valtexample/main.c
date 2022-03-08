@@ -20,11 +20,11 @@ t_game		init_game()
 	t_game *game;
 
 	game = (t_game *)malloc(sizeof(t_game));
-	game->map = (char **)malloc(sizeof(char*) * COLUMNS);
-	for (int i = 0; i < COLUMNS; i++)
+	game->map = (char **)malloc(sizeof(char*) * ROWS);
+	for (int i = 0; i < ROWS; i++)
 	{
-		game->map[i] = (char *)malloc(sizeof(char) * ROWS);
-		for (int j = 0; j < ROWS; j++)
+		game->map[i] = (char *)malloc(sizeof(char) * COLUMNS);
+		for (int j = 0; j < COLUMNS; j++)
 			game->map[i][j] = '#';
 	}
 	game->confirmed_score = 0;
@@ -134,7 +134,13 @@ void	findhive(agent_info_t info)
 void	print_map(t_game game)
 {
 	for (int i = 0; i < ROWS; i++)
-		printf("%.30s\n", game.map[i]);
+	{
+		for (int j = 0; j < COLUMNS; j++)
+		{
+			write(1, &game.map[i][j], 1);
+		}
+		write(1, '\n', 1);
+	}
 }
 
 int find_neighbour(agent_info_t info, cell_t type)
