@@ -45,13 +45,13 @@ void	init_brains()
 	}
 }
 
-void	goback(agent_info_t *info)
+/* void	goback(agent_info_t *info)
 {
 	if (brains[info->bee].dir == E)
 		brains[info->bee].dir = W;
 	else
 		brains[info->bee].dir = E;
-}
+} */
 
 char	enum_to_str(cell_t type, int player, coords_t cords, agent_info_t info)
 {
@@ -148,7 +148,6 @@ int find_neighbour(agent_info_t info, cell_t type)
     }
     return -1;
 }
-
 command_t think(agent_info_t info)
 {
     cell_t bee = info.cells[VIEW_DISTANCE][VIEW_DISTANCE];
@@ -161,6 +160,7 @@ command_t think(agent_info_t info)
         int hive_dir = find_neighbour(info, hive_cell(info.player));
         if (hive_dir >= 0)
         {
+			brains[info.bee].hasflower = false;
             return (command_t) {
                 .action = FORAGE,
                 .direction = hive_dir
@@ -179,9 +179,58 @@ command_t think(agent_info_t info)
             };
         }
     }
+	if (brains[info.bee].hasflower == true)
+	{
+		if (info.player == 0)
+		{
+/* 			if (info.col > game.hivecords.col)
+			if (info.crow > game.hivecords.row) */
+			if (info.col == game.hivecords.col && info.row < 12)
+			{
+				return (command_t) {
+					.action = MOVE,
+					.direction = S
+				};
+			}
+			if (info.col== game.hivecords.col&& info.row > 12)
+			{
+				return (command_t) {
+					.action = MOVE,
+					.direction = N
+				};
+			}
+			if (info.col > game.hivecords.col)
+				return (command_t) {
+					.action = MOVE,
+					.direction = get_player_dir(W, &info)
+				};
+		}
+		else
+		{
+			if (info.col == game.hivecords.col && info.row < 12)
+			{
+				return (command_t) {
+					.action = MOVE,
+					.direction = S
+				};
+			}
+			if (info.col == game.hivecords.col && info.row > 12)
+			{
+				return (command_t) {
+					.action = MOVE,
+					.direction = N
+				};
+			}
+			if (info.col < game.hivecords.col)
+				return (command_t) {
+					.action = MOVE,
+					.direction = E
+				};
+		}
+	}
 	return (command_t) {
 		.action = MOVE,
-		.direction = get_player_dir(E, &info)
+		.direction = get_player_dir(rand() % 8, &info)
 	};
 }
 
