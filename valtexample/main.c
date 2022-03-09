@@ -116,7 +116,7 @@ void	update_map(t_game game, agent_info_t info)
 		game.map[gcoords.row][gcoords.col] = enum_to_str(
 				info.cells[coords.row][coords.col],
 				info.player,
-				gcoords,
+				gcoords,						//here somehwere is the bug that makes it  crash
 				info);
 	}
 }
@@ -192,6 +192,13 @@ command_t think(agent_info_t info)
 			}
 		if (info.player == 0)
 		{
+			if (find_neighbour(info, BEE_1) >= 0 || find_neighbour(info, BEE_1_WITH_FLOWER) >= 0)
+			{
+				return (command_t) {
+					.action = MOVE,
+					.direction = rand() % 8
+				};
+			}
 			if (info.row < game.hivecords.row && info.col > 1)
 			{
 				return (command_t) {
@@ -228,6 +235,13 @@ command_t think(agent_info_t info)
 		}
 		else
 		{
+			if (find_neighbour(info, BEE_0) >= 0 || find_neighbour(info, BEE_0_WITH_FLOWER) >= 0)
+			{
+				return (command_t) {
+					.action = MOVE,
+					.direction = rand() % 8
+				};
+			}
 			if (info.row < game.hivecords.row && info.col < 28)
 			{
 				return (command_t) {
