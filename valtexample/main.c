@@ -9,6 +9,26 @@
 t_brains	brains[5];
 t_game 		game;
 
+void	ft_bzero(void *s, size_t n)
+{
+	int	i;
+
+	i = 0;
+	while (n--)
+		((unsigned char *)s)[i++] = 0;
+}
+
+void	*ft_memalloc(size_t size)
+{
+	void	*mem;
+
+	mem = malloc(sizeof(mem) * size);
+	if (!mem)
+		return (NULL);
+	ft_bzero(mem, size);
+	return (mem);
+}
+
 dir_t	get_player_dir(dir_t dir, agent_info_t *info)
 {
 	dir = dir + (flag_dir[dir] * (info->player == 1));
@@ -17,18 +37,26 @@ dir_t	get_player_dir(dir_t dir, agent_info_t *info)
 
 t_game		init_game()
 {
-	t_game *game;
+	t_game game;
+	int j;
 
-	game = (t_game *)malloc(sizeof(t_game));
-	game->map = (char **)malloc(sizeof(char*) * ROWS);
+	//game = (t_game *)ft_memalloc(sizeof(t_game) + 1);
+	game.map = (char **)malloc(sizeof(char *) * ROWS + 1);
+	if (!game.map)
+		exit(1);
+	game.map[ROWS] = 0;
 	for (int i = 0; i < ROWS; i++)
 	{
-		game->map[i] = (char *)malloc(sizeof(char) * COLUMNS);
-		for (int j = 0; j < COLUMNS; j++)
-			game->map[i][j] = '#';
+		game.map[i] = (char *)ft_memalloc(sizeof(char) * COLUMNS + 1);
+		if (!game.map[i])
+			exit(1);
+		for (j = 0; j < COLUMNS; j++)
+			game.map[i][j] = '#';
+		game.map[i][j] = '\0';
+
 	}
-	game->confirmed_score = 0;
-	return (*game);
+	game.confirmed_score = 0;
+	return (game);
 }
 
 void	init_brains()
@@ -57,47 +85,47 @@ char	enum_to_str(cell_t type, coords_t cords, agent_info_t info)
 {
 	if (type == EMPTY)
 		return ('.');
-	else if (type == FLOWER)
+	if (type == FLOWER)
 		return ('F');
-	else if (type == WALL)
+	if (type == WALL)
 		return ('W');
-	else if (type == OUTSIDE)
+	if (type == OUTSIDE)
 		return ('0');
 
 	if (info.player == 0)
 	{
 		if (type == BEE_0)
 			return ('B');
-		else if (type == BEE_1)
+		if (type == BEE_1)
 			return ('E');
-		else if (type == BEE_0_WITH_FLOWER)
+		if (type == BEE_0_WITH_FLOWER)
 			return ('b');
-		else if (type == BEE_1_WITH_FLOWER)
+		if (type == BEE_1_WITH_FLOWER)
 			return ('e');
-		else if (type == HIVE_0)
+		if (type == HIVE_0)
 		{
 			game.hivecords = cords;
 			return ('H');
 		}
-		else if (type == HIVE_1)
+		if (type == HIVE_1)
 			return ('h');
 	}
 	else if (info.player == 1)
 	{
 		if (type == BEE_1)
 			return ('B');
-		else if (type == BEE_0)
+		if (type == BEE_0)
 			return ('E');
-		else if (type == BEE_1_WITH_FLOWER)
+		if (type == BEE_1_WITH_FLOWER)
 			return ('b');
-		else if (type == BEE_0_WITH_FLOWER)
+		if (type == BEE_0_WITH_FLOWER)
 			return ('e');
-		else if (type == HIVE_1)
+		if (type == HIVE_1)
 		{
 			game.hivecords = cords;
 			return ('H');
 		}
-		else if (type == HIVE_0)
+		if (type == HIVE_0)
 			return ('h');
 	}
 	return ('X');
@@ -109,13 +137,13 @@ void	update_map(t_game game, agent_info_t info)
 	coords_t bee = {info.row, info.col};
 
 	game.map[info.row][info.col] = enum_to_str(info.cells[center.row][center.col], bee, info);
-	for (int dir = 0; dir < 8; dir++)
+	for (int dir = 0; dir < 8; dir++)		//here somewhere is the bug that makes it crash
 	{
 		coords_t gcoords = direction_to_coords(bee, dir);
 		coords_t coords = direction_to_coords(center, dir);
 		game.map[gcoords.row][gcoords.col] = enum_to_str(
 				info.cells[coords.row][coords.col],
-				gcoords,						//here somehwere is the bug that makes it crash
+				gcoords,
 				info);
 	}
 }
@@ -178,7 +206,7 @@ command_t think(agent_info_t info)
             };
         }
     }
-	if (brains[info.bee].hasflower == true)
+	/* if (brains[info.bee].hasflower == true)
 	{
 		int obstacle;
 			obstacle = find_neighbour(info, FLOWER);
@@ -275,7 +303,7 @@ command_t think(agent_info_t info)
 					.direction = E
 				};
 		}
-	}
+	} */
 	int go_way = rand() % 8;
 
 	if (go_way == W)
@@ -290,7 +318,7 @@ int main(int argc, char **argv)
 {
 	game = init_game();
 
-    init_brains();
+   init_brains();
     if (argc < 3)
         panic("Usage: ./agent arena_host arena_ip");
 
