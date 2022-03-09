@@ -53,7 +53,7 @@ void	init_brains()
 		brains[info->bee].dir = E;
 } */
 
-char	enum_to_str(cell_t type, int player, coords_t cords, agent_info_t info)
+char	enum_to_str(cell_t type, coords_t cords, agent_info_t info)
 {
 	if (type == EMPTY)
 		return ('.');
@@ -64,7 +64,7 @@ char	enum_to_str(cell_t type, int player, coords_t cords, agent_info_t info)
 	else if (type == OUTSIDE)
 		return ('0');
 
-	if (player == 0)
+	if (info.player == 0)
 	{
 		if (type == BEE_0)
 			return ('B');
@@ -82,7 +82,7 @@ char	enum_to_str(cell_t type, int player, coords_t cords, agent_info_t info)
 		else if (type == HIVE_1)
 			return ('h');
 	}
-	else if (player == 1)
+	else if (info.player == 1)
 	{
 		if (type == BEE_1)
 			return ('B');
@@ -108,15 +108,14 @@ void	update_map(t_game game, agent_info_t info)
 	coords_t center = {VIEW_DISTANCE, VIEW_DISTANCE};
 	coords_t bee = {info.row, info.col};
 
-	game.map[info.row][info.col] = enum_to_str(info.cells[center.row][center.col], info.player, bee, info);
+	game.map[info.row][info.col] = enum_to_str(info.cells[center.row][center.col], bee, info);
 	for (int dir = 0; dir < 8; dir++)
 	{
 		coords_t gcoords = direction_to_coords(bee, dir);
 		coords_t coords = direction_to_coords(center, dir);
 		game.map[gcoords.row][gcoords.col] = enum_to_str(
 				info.cells[coords.row][coords.col],
-				info.player,
-				gcoords,						//here somehwere is the bug that makes it  crash
+				gcoords,						//here somehwere is the bug that makes it crash
 				info);
 	}
 }
