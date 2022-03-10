@@ -48,11 +48,11 @@ dir_t bee_dir[5][20] = {
 coords_t 	bee_coords[10] = {
 	{ .col = 2, .row = 3 },
 	{ .col = 7, .row = 2 },
-	{ .col = 10, .row = 3 },
+	{ .col = 14, .row = 3 },
 	{ .col = 14, .row = 7 },
 	{ .col = 14, .row = 12 },
 	{ .col = 26, .row = 12 },
-	{ .col = 10, .row = 21 },
+	{ .col = 14, .row = 21 },
 	{ .col = 14, .row = 17 },
 	{ .col = 2, .row = 21 },
 	{ .col = 7, .row = 22 }

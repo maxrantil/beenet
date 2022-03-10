@@ -49,67 +49,71 @@ int	is_obstacle(agent_info_t info)
 
 dir_t get_mission(agent_info_t *info)
 {
-	if (info->row == 12 && is_obstacle(*info))
+	int a = 0, b = 2, c = 4, d = 6, e = 8;
+	if (is_obstacle(*info))
 		return (NE);
 	if (info->bee == 0)
 	{
-		if (info->row == bee_coords[0].row && info->col == bee_coords[0].col)
+		if (info->row == bee_coords[a].row && info->col == bee_coords[a].col)
 		{
-			bee_coords[0].row = -1;
-			bee_coords[0].col = -1;
+			bee_coords[a].row = -1;
+			bee_coords[a].col = -1;
+			a++;
 		}
-		if (bee_coords[0].row == -1 || bee_coords[0].col == -1)
-			return (E);
-		if (info->row > bee_coords[0].row && info->col == bee_coords[0].col)
+		if (info->row > bee_coords[a].row && info->col == bee_coords[a].col)
 			return (N);
+		if (info->row > bee_coords[a].row && info->col < bee_coords[a].col)
+			return (NE);
 	}
 	if (info->bee == 1)
 	{
-		if (info->row == bee_coords[2].row && info->col == bee_coords[2].col)
+		if (info->row == bee_coords[b].row && info->col == bee_coords[b].col)
 		{
-			bee_coords[2].row = -1;
-			bee_coords[2].col = -1;
+			bee_coords[b].row = -1;
+			bee_coords[b].col = -1;
+			b++;
 		}
-		if (bee_coords[2].row == -1 || bee_coords[2].col == -1)
-			return (E);
-		if (info->row > bee_coords[2].row && info->col < bee_coords[2].col)
+		if (info->row > bee_coords[b].row && info->col < bee_coords[b].col)
 			return (NE);
+		if (info->row == bee_coords[b].row && info->col < bee_coords[b].col)
+			return (E);
 	}
 	if (info->bee == 2)
 	{
-		if (info->row == bee_coords[4].row && info->col == bee_coords[4].col)
+		if (info->row == bee_coords[c].row && info->col == bee_coords[c].col)
 		{
-			bee_coords[4].row = -1;
-			bee_coords[4].col = -1;
+			bee_coords[c].row = -1;
+			bee_coords[c].col = -1;
+			c++;
 		}
-		if (bee_coords[4].row == -1 || bee_coords[4].col == -1)
-			return (E);
-		if (info->row == bee_coords[4].row && info->col < bee_coords[4].col)
+		if (info->row == bee_coords[c].row && info->col < bee_coords[c].col)
 			return (E);
 	}
 	if (info->bee == 3)
 	{
-		if (info->row == bee_coords[6].row && info->col == bee_coords[6].col)
+		if (info->row == bee_coords[d].row && info->col == bee_coords[d].col)
 		{
-			bee_coords[6].row = -1;
-			bee_coords[6].col = -1;
+			bee_coords[d].row = -1;
+			bee_coords[d].col = -1;
+			d++;
 		}
-		if (bee_coords[6].row == -1 || bee_coords[6].col == -1)
-			return (E);
-		if (info->row < bee_coords[6].row && info->col < bee_coords[6].col)
+		if (info->row < bee_coords[d].row && info->col < bee_coords[d].col)
 			return (SE);
+		if (info->row == bee_coords[b].row && info->col < bee_coords[b].col)
+			return (E);
 	}
 	if (info->bee == 4)
 	{
-		if (info->row == bee_coords[8].row && info->col == bee_coords[8].col)
+		if (info->row == bee_coords[e].row && info->col == bee_coords[e].col)
 		{
-			bee_coords[8].row = -1;
-			bee_coords[8].col = -1;
+			bee_coords[e].row = -1;
+			bee_coords[e].col = -1;
+			e++;
 		}
-		if (bee_coords[8].row == -1 || bee_coords[8].col == -1)
-			return (E);
-		if (info->row < bee_coords[8].row && info->col == bee_coords[8].col)
+		if (info->row < bee_coords[e].row && info->col == bee_coords[e].col)
 			return (S);
+		if (info->row < bee_coords[a].row && info->col < bee_coords[a].col)
+			return (SE);
 	}
 	return (E);
 }
@@ -117,11 +121,18 @@ dir_t get_mission(agent_info_t *info)
 dir_t	get_player_dir(agent_info_t *info, int hasflower)
 {
 	dir_t dir;
+	int go_way = rand() % 8;
+	if (go_way == W && info->player == 0)
+		go_way = E;
+	if (go_way == E && info->player == 1)
+		go_way = W;
 	int bee_pos_is_midmap = (info->col > 1 && info->col < 28);
 	if (hasflower == 0)
 		dir = get_mission(info) + (flag_dir[dir] * (info->player == 1));
 	else
 	{
+		if (is_obstacle(*info))
+			return (go_way + (flag_dir[dir] * (info->player == 1)));
 		if (info->row > game.hivecords.row && bee_pos_is_midmap)
 			dir = NW + flag_dir[NW] * (info->player == 1);
 		else if (info->row < game.hivecords.row && bee_pos_is_midmap)
