@@ -142,8 +142,6 @@ int find_neighbour(agent_info_t info, cell_t type)
     return -1;
 }
 
-
-
 /* dir_t	get_player_dir(agent_info_t *info, int hasflower)
 {
 	dir_t dir;
@@ -207,15 +205,6 @@ command_t think(agent_info_t info)
     }
 	if (brains[info.bee].hasflower == true)
 	{
-		int obstacle;
-		obstacle = find_neighbour(info, FLOWER);
-		if (obstacle >= 0)
-		{
-			return (command_t) {
-				.action = MOVE,
-				.direction = rand() % 8
-			};
-		}
 		return (command_t) {
 			.action = MOVE,
 			.direction = get_player_dir(&info, 1)

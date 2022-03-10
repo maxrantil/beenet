@@ -29,7 +29,6 @@ static const int flag_dir[8] = {
 	-6	//NW	->	NE
 };
 
-
 int 	find_neighbour(agent_info_t info, cell_t type);
 dir_t	get_player_dir(agent_info_t *info, int hasflower);
 
