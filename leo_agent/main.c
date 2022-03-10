@@ -161,29 +161,17 @@ dir_t	get_player_dir(agent_info_t *info, int hasflower)
 	dir_t dir;
 	int bee_pos_is_midmap = (info->col > 1 && info->col < 28);
 	int go_way = rand() % 8;
-<<<<<<< HEAD
 	if (go_way == W && info->player == 0)
-=======
-
-	if (go_way == W)
->>>>>>> 414b11c9cfb2a24a6bb9082940986f8940a3288c
 		go_way = E;
 	if (go_way == E && info->player == 1)
 		go_way = W;
 	if (hasflower && is_obstacle(*info) == 0)
 	{
 		if (info->row > game.hivecords.row && bee_pos_is_midmap)
-<<<<<<< HEAD
 			dir = NW + flag_dir[NW] * (info->player == 1);	
 		else if (info->row < game.hivecords.row && bee_pos_is_midmap)
 			dir = SW + flag_dir[SW] * (info->player == 1);
 		else if (info->col == game.hivecords.col && info->row > 12)
-=======
-			dir = NW + (flag_dir[dir] * (info->player == 1));
-		if (info->row < game.hivecords.row && bee_pos_is_midmap)
-			dir = SW + (flag_dir[dir] * (info->player == 1));
-		if (info->col == game.hivecords.col && info->row > 12)
->>>>>>> 414b11c9cfb2a24a6bb9082940986f8940a3288c
 			dir = N;
 		else if (info->col == game.hivecords.col && info->row < 12)
 			dir = S;
