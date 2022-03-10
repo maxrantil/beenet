@@ -46,6 +46,26 @@ int	is_obstacle(agent_info_t info)
 	return (0);
 }
 
+coords_t get_mission(agent_info_t *info)
+{
+	coords_t bee_cords[5][2];
+	bee_cords[0][0].col = 2;
+	bee_cords[0][0].row = 3;
+	
+	bee_cords[1][0].col = 14;
+	bee_cords[1][0].row = 3;
+	
+	bee_cords[2][0].col = 14;
+	bee_cords[2][0].row = 12;
+	
+	bee_cords[3][0].col = 14;
+	bee_cords[3][0].row = 21;
+	
+	bee_cords[4][0].col = 2;
+	bee_cords[4][0].row = 21;
+	return (*bee_cords[info->bee]);
+}
+
 dir_t	get_player_dir(agent_info_t *info, int hasflower)
 {
 	dir_t dir;
@@ -55,7 +75,9 @@ dir_t	get_player_dir(agent_info_t *info, int hasflower)
 		go_way = E;
 	if (go_way == E && info->player == 1)
 		go_way = W;
-	if (hasflower && is_obstacle(*info) == 0)
+	if (hasflower == 0)
+		dir = go_way + (flag_dir[dir] * (info->player == 1));
+	else
 	{
 		if (info->row > game.hivecords.row && bee_pos_is_midmap)
 			dir = NW + flag_dir[NW] * (info->player == 1);
@@ -70,8 +92,6 @@ dir_t	get_player_dir(agent_info_t *info, int hasflower)
 		else if (info->col < game.hivecords.col && info->player == 1)
 			dir = E;
 	}
-	else
-		dir = go_way + (flag_dir[dir] * (info->player == 1));
 	return (dir);
 }
 
