@@ -142,21 +142,9 @@ int find_neighbour(agent_info_t info, cell_t type)
     return -1;
 }
 
-int	is_obstacle(agent_info_t info)
-{
-	cell_t obstacle = 0;
 
-	for (int i = 1; i < 6; i++)
-	{
-		if (find_neighbour(info, obstacle + i) >= 0)
-			return (1);
-	}
-	if (find_neighbour(info, OUTSIDE) >= 0)
-		return (1);	
-	return (0);
-}
 
-dir_t	get_player_dir(agent_info_t *info, int hasflower)
+/* dir_t	get_player_dir(agent_info_t *info, int hasflower)
 {
 	dir_t dir;
 	int bee_pos_is_midmap = (info->col > 1 && info->col < 28);
@@ -168,7 +156,7 @@ dir_t	get_player_dir(agent_info_t *info, int hasflower)
 	if (hasflower && is_obstacle(*info) == 0)
 	{
 		if (info->row > game.hivecords.row && bee_pos_is_midmap)
-			dir = NW + flag_dir[NW] * (info->player == 1);	
+			dir = NW + flag_dir[NW] * (info->player == 1);
 		else if (info->row < game.hivecords.row && bee_pos_is_midmap)
 			dir = SW + flag_dir[SW] * (info->player == 1);
 		else if (info->col == game.hivecords.col && info->row > 12)
@@ -183,7 +171,7 @@ dir_t	get_player_dir(agent_info_t *info, int hasflower)
 	else
 		dir = go_way + (flag_dir[dir] * (info->player == 1));
 	return (dir);
-}
+} */
 
 command_t think(agent_info_t info)
 {

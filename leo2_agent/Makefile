@@ -9,6 +9,7 @@ NAME=agent
 all: $(NAME)
 
 $(NAME): $(OBJS)
+	$(CC) -c movement.c
 	$(CC) -o $(NAME) $(OBJS) $(LDFLAGS)
 
 clean:
