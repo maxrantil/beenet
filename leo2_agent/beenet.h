@@ -1,9 +1,8 @@
 #ifndef BEENET_H
 #define BEENET_H
 
-#define ROWS 25
-#define COLUMNS 30
-
+#define ROWS 27
+#define COLUMNS 32
 
 typedef struct
 {
@@ -12,16 +11,13 @@ typedef struct
 	coords_t	hivecords;
 }	t_game;
 
-t_game 		game;
-
 typedef struct s_brains {
 	char	dir;
 	bool	hasflower;
 }	t_brains;
 
-
 static const int flag_dir[8] = {
-	0, 	//N
+	0, 	//N 
 	6, 	//NE 	-> 	NW
 	4, 	//E		-> 	W
 	2, 	//SE	-> 	SW
