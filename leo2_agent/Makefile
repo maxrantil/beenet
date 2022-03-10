@@ -3,7 +3,7 @@ CFLAGS= -O3 -flto
 CPPFLAGS=-I../src
 LDFLAGS=-flto -L../bin -lagent
 
-OBJS=main.o
+OBJS=main.o movement.o
 NAME=agent
 
 all: $(NAME)
