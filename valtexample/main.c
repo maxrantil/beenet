@@ -109,13 +109,13 @@ t_game		init_game()
 	int j;
 
 	//game = (t_game *)ft_memalloc(sizeof(t_game) + 1);
-	game.map = (char **)malloc(sizeof(char *) * ROWS + 1);
+	game.map = (char **)malloc(sizeof(char *) * ROWS); //should it be +1 for \0?
 	if (!game.map)
 		exit(1);
-	game.map[ROWS] = 0;
+	//game.map[ROWS] = 0;
 	for (int i = 0; i < ROWS; i++)
 	{
-		game.map[i] = (char *)ft_memalloc(sizeof(char) * COLUMNS + 1);
+		game.map[i] = (char *)ft_memalloc(sizeof(char) * COLUMNS);
 		if (!game.map[i])
 			exit(1);
 		for (j = 0; j < COLUMNS; j++)
@@ -139,13 +139,6 @@ void	init_brains()
 	}
 }
 
-/* void	goback(agent_info_t *info)
-{
-	if (brains[info->bee].dir == E)
-		brains[info->bee].dir = W;
-	else
-		brains[info->bee].dir = E;
-} */
 
 char	enum_to_str(cell_t type, coords_t cords, agent_info_t info)
 {
@@ -244,7 +237,7 @@ void	update_map(t_game game, agent_info_t info)
 	// }
 }
 
-/* void	print_map(t_game game)
+void	print_map(t_game game)
 {
 	for (int i = 0; i < ROWS; i++)
 	{
@@ -254,7 +247,8 @@ void	update_map(t_game game, agent_info_t info)
 		}
 		write(1, "\n", 1);
 	}
-} */
+		write(1, "\n", 1);
+}
 
 int find_neighbour(agent_info_t info, cell_t type)
 {
@@ -276,7 +270,7 @@ command_t think(agent_info_t info)
     cell_t bee = info.cells[VIEW_DISTANCE][VIEW_DISTANCE];
 
 	update_map(game, info);
-	//print_map(game);
+	print_map(game);
 	//printf("row: %d\n col: %d\n", game.hivecords.row, game.hivecords.col);
     if (is_bee_with_flower(bee))
     {
@@ -302,7 +296,7 @@ command_t think(agent_info_t info)
             };
         }
     }
-	/* if (brains[info.bee].hasflower == true)
+	if (brains[info.bee].hasflower == true)
 	{
 		int obstacle;
 			obstacle = find_neighbour(info, FLOWER);
@@ -399,7 +393,7 @@ command_t think(agent_info_t info)
 					.direction = E
 				};
 		}
-	} */
+	}
 	int go_way = rand() % 8;
 
 	if (go_way == W)
