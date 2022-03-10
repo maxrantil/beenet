@@ -1,6 +1,7 @@
 #include "beenet.h"
 
 t_brains	brains[5];
+int			bee_cords;
 
 void	init_brains()
 {
@@ -46,37 +47,79 @@ int	is_obstacle(agent_info_t info)
 	return (0);
 }
 
-coords_t get_mission(agent_info_t *info)
+dir_t get_mission(agent_info_t *info)
 {
-	coords_t bee_cords[5][2];
-	bee_cords[0][0].col = 2;
-	bee_cords[0][0].row = 3;
-	
-	bee_cords[1][0].col = 14;
-	bee_cords[1][0].row = 3;
-	
-	bee_cords[2][0].col = 14;
-	bee_cords[2][0].row = 12;
-	
-	bee_cords[3][0].col = 14;
-	bee_cords[3][0].row = 21;
-	
-	bee_cords[4][0].col = 2;
-	bee_cords[4][0].row = 21;
-	return (*bee_cords[info->bee]);
+	if (info->row == 12 && is_obstacle(*info))
+		return (NE);
+	if (info->bee == 0)
+	{
+		if (info->row == bee_coords[0].row && info->col == bee_coords[0].col)
+		{
+			bee_coords[0].row = -1;
+			bee_coords[0].col = -1;
+		}
+		if (bee_coords[0].row == -1 || bee_coords[0].col == -1)
+			return (E);
+		if (info->row > bee_coords[0].row && info->col == bee_coords[0].col)
+			return (N);
+	}
+	if (info->bee == 1)
+	{
+		if (info->row == bee_coords[2].row && info->col == bee_coords[2].col)
+		{
+			bee_coords[2].row = -1;
+			bee_coords[2].col = -1;
+		}
+		if (bee_coords[2].row == -1 || bee_coords[2].col == -1)
+			return (E);
+		if (info->row > bee_coords[2].row && info->col < bee_coords[2].col)
+			return (NE);
+	}
+	if (info->bee == 2)
+	{
+		if (info->row == bee_coords[4].row && info->col == bee_coords[4].col)
+		{
+			bee_coords[4].row = -1;
+			bee_coords[4].col = -1;
+		}
+		if (bee_coords[4].row == -1 || bee_coords[4].col == -1)
+			return (E);
+		if (info->row == bee_coords[4].row && info->col < bee_coords[4].col)
+			return (E);
+	}
+	if (info->bee == 3)
+	{
+		if (info->row == bee_coords[6].row && info->col == bee_coords[6].col)
+		{
+			bee_coords[6].row = -1;
+			bee_coords[6].col = -1;
+		}
+		if (bee_coords[6].row == -1 || bee_coords[6].col == -1)
+			return (E);
+		if (info->row < bee_coords[6].row && info->col < bee_coords[6].col)
+			return (SE);
+	}
+	if (info->bee == 4)
+	{
+		if (info->row == bee_coords[8].row && info->col == bee_coords[8].col)
+		{
+			bee_coords[8].row = -1;
+			bee_coords[8].col = -1;
+		}
+		if (bee_coords[8].row == -1 || bee_coords[8].col == -1)
+			return (E);
+		if (info->row < bee_coords[8].row && info->col == bee_coords[8].col)
+			return (S);
+	}
+	return (E);
 }
 
 dir_t	get_player_dir(agent_info_t *info, int hasflower)
 {
 	dir_t dir;
 	int bee_pos_is_midmap = (info->col > 1 && info->col < 28);
-	int go_way = rand() % 8;
-	if (go_way == W && info->player == 0)
-		go_way = E;
-	if (go_way == E && info->player == 1)
-		go_way = W;
 	if (hasflower == 0)
-		dir = go_way + (flag_dir[dir] * (info->player == 1));
+		dir = get_mission(info) + (flag_dir[dir] * (info->player == 1));
 	else
 	{
 		if (info->row > game.hivecords.row && bee_pos_is_midmap)
