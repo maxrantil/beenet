@@ -142,7 +142,7 @@ int find_neighbour(agent_info_t info, cell_t type)
     return -1;
 }
 
-int	is_obstacle(agent_info_t info)
+/* int	is_obstacle(agent_info_t info)
 {
 	cell_t obstacle = 0;
 
@@ -154,7 +154,7 @@ int	is_obstacle(agent_info_t info)
 	if (find_neighbour(info, OUTSIDE) >= 0)
 		return (1);
 	return (0);
-}
+} */
 
 /* dir_t	get_player_dir(agent_info_t *info, int hasflower)
 {
