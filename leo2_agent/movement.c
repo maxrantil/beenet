@@ -29,7 +29,7 @@ dir_t	get_player_dir(agent_info_t *info, int hasflower)
 		go_way = E;
 	if (go_way == E && info->player == 1)
 		go_way = W;
-	if (hasflower && is_obstacle(*info) == 0)
+	if (hasflower)// && is_obstacle(*info) == 0)
 	{
 		if (info->row > game.hivecords.row && bee_pos_is_midmap)
 			dir = NW + flag_dir[NW] * (info->player == 1);

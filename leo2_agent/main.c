@@ -54,8 +54,8 @@ char	enum_to_str(cell_t type, int player, coords_t cords, agent_info_t info)
 		return ('F');
 	else if (type == WALL)
 		return ('W');
-	else if (type == OUTSIDE)
-		return ('0');
+/* 	else if (type == OUTSIDE)
+		return ('0'); */
 
 	if (player == 0)
 	{
@@ -96,7 +96,7 @@ char	enum_to_str(cell_t type, int player, coords_t cords, agent_info_t info)
 	return ('X');
 }
 
-void	update_map(t_game game, agent_info_t info)
+/* void	update_map(t_game game, agent_info_t info)
 {
 	coords_t center = {VIEW_DISTANCE, VIEW_DISTANCE};
 	coords_t bee = {info.row, info.col};
@@ -112,7 +112,7 @@ void	update_map(t_game game, agent_info_t info)
 				gcoords,
 				info);
 	}
-}
+} */
 
 /* void	print_map(t_game game)
 {
