@@ -1,8 +1,8 @@
 #ifndef BEENET_H
 #define BEENET_H
 
-#define ROWS 27
-#define COLUMNS 32
+#define ROWS 25
+#define COLUMNS 30
 
 typedef struct
 {
