@@ -4,6 +4,12 @@
 #define ROWS 25
 #define COLUMNS 30
 
+#include <time.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "../src/agent.h"
 
 typedef struct
 {
@@ -30,9 +36,6 @@ static const int flag_dir[8] = {
 	-4,	//W		->	E
 	-6	//NW	->	NE
 };
-
-int 	find_neighbour(agent_info_t info, cell_t type);
-dir_t	get_player_dir(agent_info_t *info, int hasflower);
 
 #endif
 

@@ -3,13 +3,12 @@ CFLAGS= -O3 -flto
 CPPFLAGS=-I../src
 LDFLAGS=-flto -L../bin -lagent
 
-OBJS=main.o movement.o
+OBJS=main.o
 NAME=agent
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) -c movement.c
 	$(CC) -o $(NAME) $(OBJS) $(LDFLAGS)
 
 clean:
