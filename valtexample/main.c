@@ -220,7 +220,7 @@ void	update_map(t_game game, agent_info_t info)
 		{
 			coords_t gcoords = gdirection_to_coords(bee, scan);
 			coords_t coords = gdirection_to_coords(center, scan);
-			if ((gcoords.col >= 0 && gcoords.row >= 0) && (gcoords.col <= COLUMNS && gcoords.row <= ROWS))
+			if (gcoords.col >= 0 && gcoords.row >= 0 && gcoords.col <= COLUMNS && gcoords.row <= ROWS)
 			{
 				game.map[gcoords.row][gcoords.col] = enum_to_str(
 					info.cells[coords.row][coords.col],
