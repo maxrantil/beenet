@@ -9,6 +9,74 @@
 t_brains	brains[5];
 t_game 		game;
 
+
+static const coords_t goffsets[] = {
+	{-3, -3},
+	{-3, -2},
+	{-3, -1},
+	{-3, 0},
+	{-3, 1},
+	{-3, 2},
+	{-3, 1},
+	{-3, 2},
+	{-3, 3},
+	{-2, -3},
+	{-2, -2},
+	{-2, -1},
+	{-2, 0},
+	{-2, 1},
+	{-2, 2},
+	{-2, 1},
+	{-2, 2},
+	{-2, 3},
+	{-1, -3},
+	{-1, -2},
+	{-1, -1},
+	{-1, 0},
+	{-1, 1},
+	{-1, 2},
+	{-1, 1},
+	{-1, 2},
+	{-1, 3},
+	{0, -3},
+	{0, -2},
+	{0, -1},
+	{0, 0},
+	{0, 1},
+	{0, 2},
+	{0, 1},
+	{0, 2},
+	{0, 3},
+	{1, -3},
+	{1, -2},
+	{1, -1},
+	{1, 0},
+	{1, 1},
+	{1, 2},
+	{1, 1},
+	{1, 2},
+	{1, 3},
+	{2, -3},
+	{2, -2},
+	{2, -1},
+	{2, 0},
+	{2, 1},
+	{2, 2},
+	{2, 1},
+	{2, 2},
+	{2, 3},
+	{3, -3},
+	{3, -2},
+	{3, -1},
+	{3, 0},
+	{3, 1},
+	{3, 2},
+	{3, 1},
+	{3, 2},
+	{3, 3}
+};
+
+
 void	ft_bzero(void *s, size_t n)
 {
 	int	i;
@@ -52,8 +120,6 @@ t_game		init_game()
 			exit(1);
 		for (j = 0; j < COLUMNS; j++)
 			game.map[i][j] = '#';
-		game.map[i][j] = '\0';
-
 	}
 	game.confirmed_score = 0;
 	return (game);
@@ -131,22 +197,51 @@ char	enum_to_str(cell_t type, coords_t cords, agent_info_t info)
 	return ('X');
 }
 
+coords_t gdirection_to_coords(coords_t from, int scan)
+{
+    coords_t offset = goffsets[scan];
+
+    return (coords_t) {
+        .row = from.row + offset.row,
+        .col = from.col + offset.col
+    };
+}
+
 void	update_map(t_game game, agent_info_t info)
 {
 	coords_t center = {VIEW_DISTANCE, VIEW_DISTANCE};
 	coords_t bee = {info.row, info.col};
+	int	scan;
 
-	game.map[info.row][info.col] = enum_to_str(info.cells[center.row][center.col], bee, info);
-	for (int dir = 0; dir < 8; dir++)		//here somewhere is the bug that makes it crash
+	scan = 0;
+	for (int i = 0; i < VIEW_DISTANCE; i++)
 	{
-		coords_t gcoords = direction_to_coords(bee, dir);
-		coords_t coords = direction_to_coords(center, dir);
-		if (gcoords.col >= 0 && gcoords.row >= 0)
-			game.map[gcoords.row][gcoords.col] = enum_to_str(
+		for (int j = 0; j < VIEW_DISTANCE; j++)
+		{
+			coords_t gcoords = gdirection_to_coords(bee, scan);
+			coords_t coords = direction_to_coords(center, scan);
+			if (gcoords.col >= 0 && gcoords.row >= 0)
+			{
+				game.map[gcoords.row][gcoords.col] = enum_to_str(
 					info.cells[coords.row][coords.col],
 					gcoords,
 					info);
+			}
+			++scan;
+		}
 	}
+
+	// game.map[info.row][info.col] = enum_to_str(info.cells[center.row][center.col], bee, info);
+	// for (int dir = 0; dir < 8; dir++)		//here somewhere is the bug that makes it crash
+	// {
+	// 	coords_t gcoords = direction_to_coords(bee, dir);
+	// 	coords_t coords = direction_to_coords(center, dir);
+	// 	if (gcoords.col >= 0 && gcoords.row >= 0)
+	// 		game.map[gcoords.row][gcoords.col] = enum_to_str(
+	// 				info.cells[coords.row][coords.col],
+	// 				gcoords,
+	// 				info);
+	// }
 }
 
 /* void	print_map(t_game game)
