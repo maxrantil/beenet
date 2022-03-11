@@ -1,19 +1,35 @@
 #include "beenet.h"
 
-t_brains	brains[5];
-int			bee_cords;
+coords_t	flower_cords[50];
 
-void	init_brains()
+int	check_for_duplicate(agent_info_t info, int count, int col, int row)
 {
-	int		i = 0;
-	char	dir;
-
-	dir = E;
-	while (i != 5)
+	for (int i = count; i > 0; i--)
 	{
-		brains[i].dir = dir;
-		brains[i].hasflower = false;
-		i++;
+		if (flower_cords[i].row == -1 && flower_cords[i].col == -1)
+			return (0);
+		if (flower_cords[i].row == row && flower_cords[i].col == col)
+			return (1);
+	}
+	return (0);
+}
+
+void get_flowerpos(agent_info_t info)
+{
+	int count = 0;
+	for (int i = 0; i < 7; i++)
+	{
+		for (int j = 0; j < 7; j++)
+		{
+			if (info.cells[i][j] == FLOWER)
+			{
+				if (check_for_duplicate(info, count, info.col - i, info.col - j))
+					break;
+				flower_cords[count].col = info.col - 3 + i; //bee col = 2 // flower col = 0
+				flower_cords[count].row = info.row - 3 + j; //bee row = 3 // flower row = 0
+				count++;
+			}
+		}
 	}
 }
 
@@ -154,12 +170,24 @@ command_t think(agent_info_t info)
     cell_t bee = info.cells[VIEW_DISTANCE][VIEW_DISTANCE];
 	game.hivecords.row = 12;
 	game.hivecords.col = 1 + 27 * (info.player == 1);
+	static int a;
+	for (int i = 0; i < 50; i++)
+	{
+		flower_cords[i].col = -1;
+		flower_cords[i].row = -1;
+	}
+	
+	
+	/* for (int i = 0; i < 50; i++)
+	{
+		if (flower_cords[i].col != -1 && flower_cords[i].row != -1)
+			printf("%d ,%d\n", flower_cords[i].col, flower_cords[i].row);
+	} */
     if (is_bee_with_flower(bee))
     {
         int hive_dir = find_neighbour(info, hive_cell(info.player));
         if (hive_dir >= 0)
         {
-			brains[info.bee].hasflower = false;
             return (command_t) {
                 .action = FORAGE,
                 .direction = hive_dir
@@ -169,9 +197,8 @@ command_t think(agent_info_t info)
     else
     {
         int flower_dir = find_neighbour(info, FLOWER);
-        if (flower_dir >= 0 && brains[info.bee].hasflower == false)
+        if (flower_dir >= 0)
         {
-			brains[info.bee].hasflower = true;
             return (command_t) {
                 .action = FORAGE,
                 .direction = flower_dir
@@ -179,12 +206,18 @@ command_t think(agent_info_t info)
         }
     }
 
-	if (brains[info.bee].hasflower == true)
+	if (is_bee_with_flower(bee))
 	{
 		return (command_t) {
 			.action = MOVE,
 			.direction = get_player_dir(&info, 1)
 		};
+	}
+	if (info.player == 0 && a == 0)
+	{
+		get_flowerpos(info);
+		printf("%d ,%d\n", flower_cords[0].col, flower_cords[0].row);
+		a++;
 	}
 	return (command_t) {
 		.action = MOVE,

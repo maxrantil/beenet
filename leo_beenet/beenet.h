@@ -1,15 +1,16 @@
 #ifndef BEENET_H
-#define BEENET_H
+# define BEENET_H
 
-#define ROWS 25
-#define COLUMNS 30
+# define ROWS 25
+# define COLUMNS 30
 
-#include <time.h>
-#include <stdbool.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "../src/agent.h"
+# include <time.h>
+# include <stdbool.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include "../src/agent.h"
+# include "../src/arena_common.h"
 
 typedef struct
 {
@@ -25,6 +26,8 @@ typedef struct s_brains {
 	char	dir;
 	bool	hasflower;
 }	t_brains;
+
+//t_brains	brains[5];
 
 static const int flag_dir[8] = {
 	0, 	//N	:0
@@ -58,6 +61,4 @@ coords_t 	bee_coords[10] = {
 	{ .col = 7, .row = 22 }
 };
 
-
 #endif
-
