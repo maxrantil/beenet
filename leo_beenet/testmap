@@ -29,20 +29,23 @@
 0: main obj: pickup flowers on col 0-5, row 0-11 and col 6-17, row 0-4
   1st: 2 , 3 (7 moves)
   2nd: 7 , 2
+  3rd: 26, 2
   
 1: main obj: pickup flowers on col 6-17, row 5-9
   1st: 14, 3 (12 moves)
   2nd: 14 , 7
-
+  3rd: 26,  7
 2: 
   1st: 14, 12 (12 moves)
 
 3: main obj: pickup flowers on col 6-17, row 15-19
   1st: 14, 21 (12 moves)
   2nd: 14 , 17
+  3rd: 26,  17
 
 4: main obj: pickup flowers on col 0-5, row 13-24 and col 6-17, row 20-24
   1st: 2 , 21 (7 moves)
   2nd: 7 , 22
+  3rd: 26,  22
   
 make diagonal checkpoints to go SW/NW for every bee. 

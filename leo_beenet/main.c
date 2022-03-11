@@ -64,9 +64,101 @@ int	is_obstacle(agent_info_t info)
 	return (0);
 }
 
+coords_t	get_nearby_flower(int beenum)
+{
+	coords_t cpycords;
+
+	cpycords.row = -1;
+	cpycords.col = -1;
+	for (int i = 0; i < 50; i++)
+	{
+		if (beenum == 0)
+		{
+			if (flower_cords[i].row < 8 && flower_cords[i].col < 29)
+			{
+				cpycords.row = flower_cords[i].row;
+				cpycords.col = flower_cords[i].col;
+				flower_cords[i].row = -1;
+				flower_cords[i].col = -1;
+				break ;
+			}
+		}
+		else if (beenum == 1)
+		{
+			if (flower_cords[i].row < 10 && flower_cords[i].col >= 10 && flower_cords[i].col < 29)
+			{
+				cpycords.row = flower_cords[i].row;
+				cpycords.col = flower_cords[i].col;
+				flower_cords[i].row = -1;
+				flower_cords[i].col = -1;
+				break ;
+			}
+		}
+		else if (beenum == 2)
+		{
+			if (flower_cords[i].row >= 8 && flower_cords[i].row <= 16 && flower_cords[i].col < 29)
+			{
+				cpycords.row = flower_cords[i].row;
+				cpycords.col = flower_cords[i].col;
+				flower_cords[i].row = -1;
+				flower_cords[i].col = -1;
+				break ;
+			}
+		}
+		else if (beenum == 3)
+		{
+			if (flower_cords[i].row > 14 && flower_cords[i].col >= 10 && flower_cords[i].col < 29)
+			{
+				cpycords.row = flower_cords[i].row;
+				cpycords.col = flower_cords[i].col;
+				flower_cords[i].row = -1;
+				flower_cords[i].col = -1;
+				break ;
+			}
+		}
+		else if (beenum == 4)
+		{
+			if (flower_cords[i].row > 16 && flower_cords[i].col < 29)
+			{
+				cpycords.row = flower_cords[i].row;
+				cpycords.col = flower_cords[i].col;
+				flower_cords[i].row = -1;
+				flower_cords[i].col = -1;
+				break ;
+			}
+		}
+	}
+	return (cpycords);
+}
+
+dir_t	get_flower_dir(agent_info_t *info, coords_t flower_dir)
+{
+	dir_t dir;
+	if (info->row < flower_dir.row && info->col < flower_dir.col) // bee is NW of flower
+		dir = SE;
+	else if (info->row < flower_dir.row && info->col > flower_dir.col) // bee is NE of flower
+		dir = SW;
+	else if (info->row > flower_dir.row && info->col < flower_dir.col) // bee is SE of flower
+		dir = NE;
+	else if (info->row > flower_dir.row && info->col > flower_dir.col) // bee is SE of flower
+		dir = NW;
+	else if (info->row == flower_dir.row && info->col < flower_dir.col) // bee is W of flower
+		dir = E;
+	else if (info->row == flower_dir.row && info->col > flower_dir.col) // bee is W of flower
+		dir = W;
+	else if (info->row > flower_dir.row && info->col == flower_dir.col) // bee is SE of flower
+		dir = N;
+	else if (info->row < flower_dir.row && info->col == flower_dir.col) // bee is SE of flower
+		dir = S;
+	return (dir);
+}
+
 dir_t get_mission(agent_info_t *info)
 {
-	int a = 0, b = 2, c = 4, d = 6, e = 8;
+	int a = 0, b = 3, c = 6, d = 9, e = 12;
+	coords_t checkflower = get_nearby_flower(info->bee);
+	if (checkflower.col != -1 && checkflower.row != -1)
+		return (get_flower_dir(info, checkflower));
 	if (is_obstacle(*info))
 		return (NE);
 	if (info->bee == 0)
@@ -171,19 +263,13 @@ command_t think(agent_info_t info)
     cell_t bee = info.cells[VIEW_DISTANCE][VIEW_DISTANCE];
 	game.hivecords.row = 12;
 	game.hivecords.col = 1 + 27 * (info.player == 1);
-	static int a;
+	static int a, b;
 	for (int i = 0; i < 50; i++)
 	{
 		flower_cords[i].col = -1;
 		flower_cords[i].row = -1;
 	}
-	
-	
-	/* for (int i = 0; i < 50; i++)
-	{
-		if (flower_cords[i].col != -1 && flower_cords[i].row != -1)
-			printf("%d ,%d\n", flower_cords[i].col, flower_cords[i].row);
-	} */
+	get_flowerpos(info);
     if (is_bee_with_flower(bee))
     {
         int hive_dir = find_neighbour(info, hive_cell(info.player));
@@ -206,22 +292,12 @@ command_t think(agent_info_t info)
             };
         }
     }
-
 	if (is_bee_with_flower(bee))
 	{
 		return (command_t) {
 			.action = MOVE,
 			.direction = get_player_dir(&info, 1)
 		};
-	}
-	if (info.player == 0 && a == 0)
-	{
-		get_flowerpos(info);
-		printf("%d ,%d\n", flower_cords[0].col, flower_cords[0].row);
-		printf("%d ,%d\n", flower_cords[1].col, flower_cords[1].row);
-		printf("%d ,%d\n", flower_cords[2].col, flower_cords[2].row);
-		printf("%d ,%d\n", flower_cords[3].col, flower_cords[3].row);
-		a++;
 	}
 	return (command_t) {
 		.action = MOVE,
