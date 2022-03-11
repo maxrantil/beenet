@@ -159,8 +159,8 @@ dir_t get_mission(agent_info_t *info)
 	coords_t checkflower = get_nearby_flower(info->bee);
 	if (checkflower.col != -1 && checkflower.row != -1)
 		return (get_flower_dir(info, checkflower));
-	if (is_obstacle(*info))
-		return (NE);
+/* 	if (is_obstacle(*info))
+		return (NE); */
 	if (info->bee == 0)
 	{
 		if (info->row == bee_coords[a].row && info->col == bee_coords[a].col)
