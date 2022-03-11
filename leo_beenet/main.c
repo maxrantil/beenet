@@ -21,12 +21,13 @@ void get_flowerpos(agent_info_t info)
 	{
 		for (int j = 0; j < 7; j++)
 		{
-			if (info.cells[i][j] == FLOWER)
+			cell_t check = info.cells[i][j];
+			if (check == FLOWER)
 			{
 				if (check_for_duplicate(info, count, info.col - i, info.col - j))
 					break;
-				flower_cords[count].col = info.col - 3 + i; //bee col = 2 // flower col = 0
-				flower_cords[count].row = info.row - 3 + j; //bee row = 3 // flower row = 0
+				flower_cords[count].col = info.col - 3 + j; //bee col = 2 // flower col = 0
+				flower_cords[count].row = info.row - 3 + i; //bee row = 3 // flower row = 0
 				count++;
 			}
 		}
@@ -217,6 +218,9 @@ command_t think(agent_info_t info)
 	{
 		get_flowerpos(info);
 		printf("%d ,%d\n", flower_cords[0].col, flower_cords[0].row);
+		printf("%d ,%d\n", flower_cords[1].col, flower_cords[1].row);
+		printf("%d ,%d\n", flower_cords[2].col, flower_cords[2].row);
+		printf("%d ,%d\n", flower_cords[3].col, flower_cords[3].row);
 		a++;
 	}
 	return (command_t) {
