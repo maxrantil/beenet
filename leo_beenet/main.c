@@ -133,8 +133,6 @@ coords_t	get_nearby_flower(int beenum)
 
 dir_t	calculate_distance(coords_t bee, coords_t dest)
 {
-	while (bee.row != dest.row || bee.col != dest.col)
-	{
 		if (bee.row > dest.row && bee.col > dest.col)
 			return (NW);
 		else if (bee.row < dest.row && bee.col > dest.col)
@@ -151,7 +149,6 @@ dir_t	calculate_distance(coords_t bee, coords_t dest)
 			return (N);
 		else if (bee.row < dest.row && bee.col == dest.col)
 			return (S);
-	}
 	return (-1);
 }
 
@@ -264,7 +261,7 @@ dir_t get_mission(agent_info_t *info)
 		coords_t dest = { bee_coords[e].row, bee_coords[e].col + flag };
 		return (calculate_distance(bee, dest));
 	}
-	return (E);
+	return (W);
 }
 
 dir_t	get_player_dir(agent_info_t *info, int hasflower)
