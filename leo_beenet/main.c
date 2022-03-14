@@ -131,6 +131,30 @@ coords_t	get_nearby_flower(int beenum)
 	return (cpycords);
 }
 
+dir_t	calculate_distance(coords_t bee, coords_t dest)
+{
+	//while (bee.row != dest.row || bee.col != dest.col)
+	//{
+		if (bee.row > dest.row && bee.col > dest.col)
+			return (NW);
+		else if (bee.row < dest.row && bee.col > dest.col)
+			return (SW);
+		else if (bee.row > dest.row && bee.col < dest.col)
+			return (NE);
+		else if (bee.row < dest.row && bee.col < dest.col)
+			return (SE);
+		else if (bee.row == dest.row && bee.col < dest.col)
+			return (E);
+		else if (bee.row == dest.row && bee.col > dest.col)
+			return (W);
+		else if (bee.row > dest.row && bee.col == dest.col)
+			return (N);
+		else if (bee.row < dest.row && bee.col == dest.col)
+			return (S);
+	//}
+	return (-1);
+}
+
 dir_t	get_flower_dir(agent_info_t *info, coords_t flower_dir)
 {
 	dir_t dir;
@@ -156,6 +180,8 @@ dir_t	get_flower_dir(agent_info_t *info, coords_t flower_dir)
 dir_t get_mission(agent_info_t *info)
 {
 	int a = 0, b = 3, c = 6, d = 9, e = 12;
+	int flag = 0;
+	coords_t bee = { info->row, info->col };
 	coords_t checkflower = get_nearby_flower(info->bee);
 	if (checkflower.col != -1 && checkflower.row != -1)
 		return (get_flower_dir(info, checkflower));
@@ -163,66 +189,80 @@ dir_t get_mission(agent_info_t *info)
 		return (NE); */
 	if (info->bee == 0)
 	{
-		if (info->row == bee_coords[a].row && info->col == bee_coords[a].col)
+		while (a < b - 1 && (bee_coords[a].row == -1 || bee_coords[a].col == -1))
+			a++;
+		if (a != 2 && info->row == bee_coords[a].row && info->col == bee_coords[a].col)
 		{
 			bee_coords[a].row = -1;
 			bee_coords[a].col = -1;
 			a++;
 		}
-		if (info->row > bee_coords[a].row && info->col == bee_coords[a].col)
-			return (N);
-		if (info->row > bee_coords[a].row && info->col < bee_coords[a].col)
-			return (NE);
+		flag = 25 * (info->player == 1);
+		flag = 16 * (info->player == 1 && a == 1);
+		flag = 0 - 25 * (info->player == 1 && a == 2);
+		coords_t dest = { bee_coords[a].row, bee_coords[a].col + flag };
+		return (calculate_distance(bee, dest));
 	}
 	if (info->bee == 1)
 	{
-		if (info->row == bee_coords[b].row && info->col == bee_coords[b].col)
+		while (b < c - 1 && (bee_coords[b].row == -1 || bee_coords[b].col == -1))
+			b++;
+		if (b != 5 && info->row == bee_coords[b].row && info->col == bee_coords[b].col)
 		{
 			bee_coords[b].row = -1;
 			bee_coords[b].col = -1;
 			b++;
 		}
-		if (info->row > bee_coords[b].row && info->col < bee_coords[b].col)
-			return (NE);
-		if (info->row == bee_coords[b].row && info->col < bee_coords[b].col)
-			return (E);
+		flag = 3 * (info->player == 1 && b != 5);
+		flag -= 23 * (info->player == 1 && b == 5);
+		coords_t dest = { bee_coords[b].row, bee_coords[b].col + flag };
+		return (calculate_distance(bee, dest));
 	}
 	if (info->bee == 2)
 	{
-		if (info->row == bee_coords[c].row && info->col == bee_coords[c].col)
+		while (c < d - 1 && (bee_coords[c].row == -1 || bee_coords[c].col == -1))
+			c++;
+		if (c != 8 && info->row == bee_coords[c].row && info->col == bee_coords[c].col)
 		{
 			bee_coords[c].row = -1;
 			bee_coords[c].col = -1;
 			c++;
 		}
-		if (info->row == bee_coords[c].row && info->col < bee_coords[c].col)
-			return (E);
+		flag = 3 * (info->player == 1 && c == 6);
+		flag -= 23 * (info->player == 1 && (c == 7 || c == 8));
+		coords_t dest = { bee_coords[c].row, bee_coords[c].col + flag };
+		return (calculate_distance(bee, dest));
 	}
 	if (info->bee == 3)
 	{
-		if (info->row == bee_coords[d].row && info->col == bee_coords[d].col)
+		while (d < e - 1 && (bee_coords[d].row == -1 || bee_coords[d].col == -1))
+			d++;
+		if (d != 11 && info->row == bee_coords[d].row && info->col == bee_coords[d].col)
 		{
 			bee_coords[d].row = -1;
 			bee_coords[d].col = -1;
 			d++;
 		}
-		if (info->row < bee_coords[d].row && info->col < bee_coords[d].col)
-			return (SE);
-		if (info->row == bee_coords[b].row && info->col < bee_coords[b].col)
-			return (E);
+		flag = 3 * (info->player == 1 && d != 11);
+		flag -= 23 * (info->player == 1 && d == 11);
+		coords_t dest = { bee_coords[d].row, bee_coords[d].col + flag };
+		return (calculate_distance(bee, dest));
 	}
 	if (info->bee == 4)
 	{
-		if (info->row == bee_coords[e].row && info->col == bee_coords[e].col)
+		while (e < 14 && (bee_coords[e].row == -1 || bee_coords[e].col == -1))
+			e++;
+		if (e != 14 && info->row == bee_coords[e].row && info->col == bee_coords[e].col)
 		{
 			bee_coords[e].row = -1;
 			bee_coords[e].col = -1;
 			e++;
 		}
-		if (info->row < bee_coords[e].row && info->col == bee_coords[e].col)
-			return (S);
-		if (info->row < bee_coords[a].row && info->col < bee_coords[a].col)
-			return (SE);
+		flag = 25 * (info->player == 1);
+		flag = 16 * (info->player == 1 && e == 13);
+		flag = 0 - 25 * (info->player == 1 && e == 14);
+		coords_t dest = { bee_coords[e].row, bee_coords[e].col + flag };
+		return (calculate_distance(bee, dest));
 	}
 	return (E);
 }
