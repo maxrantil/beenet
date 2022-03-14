@@ -49,7 +49,7 @@ void get_flowerpos(agent_info_t info)
 	}
 }
 
-bool get_enemypos(agent_info_t info) //true if enemy false if not
+bool	get_enemypos(agent_info_t info) //true if enemy false if not
 {
 	int count = 0;
 	for (int i = 0; i < 7; i++)
@@ -99,23 +99,26 @@ int find_neighbour(agent_info_t info, cell_t type)
 
 dir_t	is_obstacle(agent_info_t info)
 {
-	cell_t obstacle = 0;
-	int i = 1;
-	int ret = -1;
+	cell_t	obstacle = 0;
+	int	obs[100];
+	int	i = 1;
+	int	ret = -1;
 	int	j = 0;
+
 	for (i = 1; i < 6; i++)
 	{
 		if (ret = find_neighbour(info, obstacle + i) >= 0)
 		{
-
+			obs[j] = ret;
 			j++;
 		}
 	}
 	if ((ret = find_neighbour(info, OUTSIDE)) >= 0)
 	{
+		obs[j] = ret;
 		j++;
 	}
-	return (ret);
+	return (j);
 }
 
 coords_t	get_nearby_flower(int beenum)
@@ -294,9 +297,7 @@ dir_t	get_player_dir(agent_info_t *info, int hasflower)
 			dir = E;
 		if (is_obstacle(*info) >= 0)
 		{
-			dir += 1;
-			if (dir == 8)
-				dir = 0;
+			is_obstacle(*info);
 		}
 	}
 	return (dir);
