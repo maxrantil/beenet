@@ -192,11 +192,11 @@ dir_t get_mission(agent_info_t *info)
 			bee_coords[a].col = -1;
 			a++;
 		}
-		while (a < 2 && (bee_coords[a].row == -1 || bee_coords[a].col == -1))
-			a++;
 	 	flag = 25 * (info->player == 1);
 		flag = 16 * (info->player == 1 && a == 1);
 		flag = 0 - 25 * (info->player == 1 && a == 2);
+		while (a < 2 && (bee_coords[a].row == -1 || bee_coords[a].col == -1))
+			a++;
 		coords_t dest = { bee_coords[a].row, bee_coords[a].col + flag };
 		return (calculate_distance(bee, dest));
 	}
@@ -208,10 +208,10 @@ dir_t get_mission(agent_info_t *info)
 			bee_coords[b].col = -1;
 			b++;
 		}
-		while (b < 5 && (bee_coords[b].row == -1 || bee_coords[b].col == -1))
-			b++;
 		flag = 3 * (info->player == 1 && b != 5);
 		flag -= 23 * (info->player == 1 && b == 5);
+		while (b < 5 && (bee_coords[b].row == -1 || bee_coords[b].col == -1))
+			b++;
 		coords_t dest = { bee_coords[b].row, bee_coords[b].col + flag };
 		return (calculate_distance(bee, dest));
 	}
@@ -223,10 +223,10 @@ dir_t get_mission(agent_info_t *info)
 			bee_coords[c].col = -1;
 			c++;
 		}
-		while (c < 8 && (bee_coords[c].row == -1 || bee_coords[c].col == -1))
-			c++;
 		flag = 3 * (info->player == 1 && c == 6);
 		flag -= 23 * (info->player == 1 && (c == 7 || c == 8));
+		while (c < 8 && (bee_coords[c].row == -1 || bee_coords[c].col == -1))
+			c++;
 		coords_t dest = { bee_coords[c].row, bee_coords[c].col + flag };
 		return (calculate_distance(bee, dest));
 	}
@@ -238,10 +238,10 @@ dir_t get_mission(agent_info_t *info)
 			bee_coords[d].col = -1;
 			d++;
 		}
-		while (d < 11 && (bee_coords[d].row == -1 || bee_coords[d].col == -1))
-			d++;
 		flag = 3 * (info->player == 1 && d != 11);
 		flag -= 23 * (info->player == 1 && d == 11);
+		while (d < 11 && (bee_coords[d].row == -1 || bee_coords[d].col == -1))
+			d++;
 		coords_t dest = { bee_coords[d].row, bee_coords[d].col + flag };
 		return (calculate_distance(bee, dest));
 	}
@@ -253,11 +253,11 @@ dir_t get_mission(agent_info_t *info)
 			bee_coords[e].col = -1;
 			e++;
 		}
-		while (e < 14 && (bee_coords[e].row == -1 || bee_coords[e].col == -1))
-			e++;
 		flag = 25 * (info->player == 1);
 		flag = 16 * (info->player == 1 && e == 13);
 		flag = 0 - 25 * (info->player == 1 && e == 14);
+		while (e < 14 && (bee_coords[e].row == -1 || bee_coords[e].col == -1))
+			e++;
 		coords_t dest = { bee_coords[e].row, bee_coords[e].col + flag };
 		return (calculate_distance(bee, dest));
 	}
@@ -294,6 +294,8 @@ dir_t	get_player_dir(agent_info_t *info, int hasflower)
 	}
 	return (dir);
 }
+
+
 
 command_t think(agent_info_t info)
 {
@@ -341,7 +343,7 @@ command_t think(agent_info_t info)
 	{
 		return(command_t) {
 			.action = BUILD,
-			.direction = rand() % 8//E + flag_dir[dir] * (info.player == 1)
+			.direction = E//E + flag_dir[dir] * (info.player == 1)
 		};
 	}
 	else if (dir == -1)
@@ -360,6 +362,7 @@ command_t think(agent_info_t info)
 
 int main(int argc, char **argv)
 {
+	printf("[a: %d] ", a);
     if (argc < 3)
         panic("Usage: ./agent arena_host arena_ip");
 
