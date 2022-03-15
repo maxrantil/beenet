@@ -51,37 +51,37 @@ dir_t bee_dir[5][20] = {
 
 coords_t 	bee_coords[15] = {
 	{ .col = 2, .row = 3 },		//0
-	{ .col = 7, .row = 2 },		//0
+	{ .col = 26, .row = 3 },		//0
 	{ .col = 28, .row = 10 },	//0
-	{ .col = 14, .row = 3 },	//1
-	{ .col = 14, .row = 7 },	//1
+	{ .col = 14, .row = 5 },	//1
+	{ .col = 18, .row = 7 },	//1
 	{ .col = 26, .row = 11 },	//1
 	{ .col = 14, .row = 12 },	//2
 	{ .col = 26, .row = 12 },	//2
 	{ .col = 26, .row = 12 },	//2
-	{ .col = 14, .row = 21 },	//3
-	{ .col = 14, .row = 17 },	//3
+	{ .col = 14, .row = 19 },	//3
+	{ .col = 18, .row = 17 },	//3
 	{ .col = 26, .row = 13 },	//3
 	{ .col = 2, .row = 21 },	//4
-	{ .col = 7, .row = 22 },	//4
+	{ .col = 26, .row = 21 },	//4
 	{ .col = 28, .row = 14 }	//4
 };
 
 coords_t 	bee_coords_p1[15] = {
 	{ .col = 27, .row = 3 },		//0
-	{ .col = 22, .row = 2 },		//0
+	{ .col = 3, .row = 3 },		//0
 	{ .col = 2, .row = 10 },	//0
-	{ .col = 16, .row = 3 },	//1
-	{ .col = 16, .row = 7 },	//1
+	{ .col = 16, .row = 5 },	//1
+	{ .col = 12, .row = 7 },	//1
 	{ .col = 3, .row = 11 },	//1
 	{ .col = 16, .row = 12 },	//2
 	{ .col = 3, .row = 12 },	//2
 	{ .col = 3, .row = 12 },	//2
-	{ .col = 16, .row = 21 },	//3
-	{ .col = 16, .row = 17 },	//3
+	{ .col = 16, .row = 19 },	//3
+	{ .col = 12, .row = 17 },	//3
 	{ .col = 3, .row = 13 },	//3
 	{ .col = 27, .row = 21 },	//4
-	{ .col = 22, .row = 22 },	//4
+	{ .col = 3, .row = 21 },	//4
 	{ .col = 2, .row = 14 }	//4
 };
 

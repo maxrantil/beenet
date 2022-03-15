@@ -93,20 +93,6 @@ int find_neighbour(agent_info_t info, cell_t type)
     return -1;
 }
 
-int	is_obstacle(agent_info_t info)
-{
-	cell_t obstacle = 0;
-
-	for (int i = 1; i < 6; i++)
-	{
-		if (find_neighbour(info, obstacle + i) >= 0)
-			return (1);
-	}
-	if (find_neighbour(info, OUTSIDE) >= 0)
-		return (1);
-	return (0);
-}
-
 coords_t	get_nearby_flower(int beenum)
 {
 	coords_t cpycords;
@@ -217,6 +203,32 @@ dir_t	get_flower_dir(agent_info_t *info, coords_t flower_dir)
 	return (dir);
 }
 
+int printRandoms(int lower, int upper, int count)
+{
+    int i;
+	int num;
+
+    for (i = 0; i < count; i++) 
+	{
+        num = (rand() % (upper - lower + 1)) + lower;
+    }
+	return(num);
+}
+
+int	is_obstacle(agent_info_t info)
+{
+	cell_t obstacle = 0;
+
+	for (int i = 4; i < 7; i++)
+	{
+		if (find_neighbour(info, obstacle + i) >= 0)
+			return (1);
+	}
+	if (find_neighbour(info, OUTSIDE) >= 0)
+		return (1);
+	return (0);
+}
+
 int a = 0, b = 3, c = 6, d = 9, e = 12;
 dir_t get_mission(agent_info_t *info)
 {
@@ -225,8 +237,10 @@ dir_t get_mission(agent_info_t *info)
 	coords_t checkflower = get_nearby_flower(info->bee);
 	if (checkflower.col != -1 && checkflower.row != -1)
 		return (get_flower_dir(info, checkflower));
-  	if (is_obstacle(*info))
-		return (rand() % 8);// + flag_dir[NE] * (info->player == 1));
+  	if (is_obstacle(*info) == 1)
+		return (printRandoms(0, 4, 1));// + flag_dir[NE] * (info->player == 1));(rand() % (upper - lower + 1)) + lower;
+	/* else if (is_obstacle(*info) == 2)
+		return (printRandoms(4, 7 , 1));// + flag_dir[NE] * (info->player == 1)); */
 	if (info->bee == 0)
 	{
 		if (a != 2 && info->row == bee_coords[a].row && info->col == bee_coords[a].col)
@@ -326,8 +340,10 @@ dir_t get_mission_p1(agent_info_t *info)
 	coords_t checkflower = get_nearby_flower(info->bee);
 	if (checkflower.col != -1 && checkflower.row != -1)
 		return (get_flower_dir(info, checkflower));
-  	if (is_obstacle(*info))
-		return (rand() % 8);// + flag_dir[NE] * (info->player == 1));
+  	if (is_obstacle(*info) == 1)
+		return (printRandoms(4, 7 , 1));// + flag_dir[NE] * (info->player == 1));
+	/* else if (is_obstacle(*info) == 2)
+		return (printRandoms(0, 4, 1));// + flag_dir[NE] * (info->player == 1)); */
 	if (info->bee == 0)
 	{
 		if (a1 != 2 && info->row == bee_coords_p1[a1].row && info->col == bee_coords_p1[a1].col)
@@ -544,10 +560,17 @@ command_t think(agent_info_t info)
 	}
 	if (dir == -1)
 	{
+		if (info.player == 1)
+		{
+			return(command_t) {
+				.action = MOVE,
+				.direction = printRandoms(0, 4, 1)
+			};
+		}
 		return(command_t) {
-			.action = MOVE,
-			.direction = rand() % 8
-		};
+				.action = MOVE,
+				.direction = printRandoms(4, 7 , 1)
+			};
 	}
 
 	return (command_t) {
@@ -571,7 +594,7 @@ int main(int argc, char **argv)
 
     char *host = argv[1];
     int port = atoi(argv[2]);
-    char *team_name = "Max";
+    char *team_name = "improved";
 
     agent_main(host, port, team_name, think);
 }
