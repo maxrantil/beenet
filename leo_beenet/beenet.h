@@ -51,7 +51,7 @@ dir_t bee_dir[5][20] = {
 coords_t 	bee_coords[15] = {
 	{ .col = 2, .row = 3 },		//0
 	{ .col = 7, .row = 2 },		//0
-	{ .col = 26, .row = 10 },	//0
+	{ .col = 28, .row = 10 },	//0
 	{ .col = 14, .row = 3 },	//1
 	{ .col = 14, .row = 7 },	//1
 	{ .col = 26, .row = 11 },	//1
@@ -63,7 +63,7 @@ coords_t 	bee_coords[15] = {
 	{ .col = 26, .row = 13 },	//3
 	{ .col = 2, .row = 21 },	//4
 	{ .col = 7, .row = 22 },	//4
-	{ .col = 26, .row = 14 }	//4
+	{ .col = 28, .row = 14 }	//4
 };
 
 #endif
