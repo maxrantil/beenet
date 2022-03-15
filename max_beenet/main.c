@@ -255,11 +255,6 @@ dir_t get_mission(agent_info_t *info)
 		}
 		while (b <= 5 && (bee_coords[b].row == -1 || bee_coords[b].col == -1))
 			b++;
-		if (info->player == 1 && b >= 5)
-		{
-			coords_t dest2 = { 11, 3 };
-			return (calculate_distance(bee, dest2));
-		}			
 		coords_t dest = { bee_coords[b].row, bee_coords[b].col + flag };
 		return (calculate_distance(bee, dest));
 	}
@@ -320,6 +315,112 @@ dir_t get_mission(agent_info_t *info)
 	return (W);
 }
 
+/*  			*/
+/* 	PLAYER 1  	*/
+/*  			*/
+int a1 = 0, b1 = 3, c1 = 6, d1 = 9, e1 = 12;
+dir_t get_mission_p1(agent_info_t *info)
+{
+	int flag = 0;
+	coords_t bee = { info->row, info->col };
+	coords_t checkflower = get_nearby_flower(info->bee);
+	if (checkflower.col != -1 && checkflower.row != -1)
+		return (get_flower_dir(info, checkflower));
+  	if (is_obstacle(*info))
+		return (rand() % 8);// + flag_dir[NE] * (info->player == 1));
+	if (info->bee == 0)
+	{
+		if (a1 != 2 && info->row == bee_coords_p1[a1].row && info->col == bee_coords_p1[a1].col)
+		{
+			bee_coords_p1[a1].row = -1;
+			bee_coords_p1[a1].col = -1;
+			a1++;
+		}
+		while (a1 < 2 && (bee_coords_p1[a1].row == -1 || bee_coords_p1[a1].col == -1))
+			a1++;
+		if (info->player == 1 && a1 == 2)
+		{
+			coords_t dest2 = { 10, 1 };
+			return (calculate_distance(bee, dest2));
+		}	
+		coords_t dest = { bee_coords_p1[a1].row, bee_coords_p1[a1].col + flag };
+		return (calculate_distance(bee, dest));
+	}
+	if (info->bee == 1)
+	{
+		if (b1 <= 5 && info->row == bee_coords_p1[b1].row && info->col == bee_coords_p1[b1].col)
+		{
+			bee_coords_p1[b1].row = -1;
+			bee_coords_p1[b1].col = -1;
+			b1++;
+		}
+		while (b1 <= 5 && (bee_coords_p1[b1].row == -1 || bee_coords_p1[b1].col == -1))
+			b1++;
+		if (info->player == 1 && a1 == 2)
+		{
+			coords_t dest2 = { 11, 3 };
+			return (calculate_distance(bee, dest2));
+		}		
+		coords_t dest = { bee_coords_p1[b1].row, bee_coords_p1[b1].col + flag };
+		return (calculate_distance(bee, dest));
+	}
+	if (info->bee == 2)
+	{
+		if (c1 <= 8 && info->row == bee_coords_p1[c1].row && info->col == bee_coords_p1[c1].col)
+		{
+			bee_coords_p1[c1].row = -1;
+			bee_coords_p1[c1].col = -1;
+			c1++;
+		}
+		while (c1 <= 8 && (bee_coords_p1[c1].row == -1 || bee_coords_p1[c1].col == -1))
+			c1++;
+		if (info->player == 1 && c1 >= 8)
+		{
+			coords_t dest2 = { 12, 3 };
+			return (calculate_distance(bee, dest2));
+		}			
+		coords_t dest = { bee_coords_p1[c1].row, bee_coords_p1[c1].col + flag };
+		return (calculate_distance(bee, dest));
+	}
+	if (info->bee == 3)
+	{
+		if (d1 <= 11 && info->row == bee_coords_p1[d1].row && info->col == bee_coords_p1[d1].col)
+		{
+			bee_coords_p1[d1].row = -1;
+			bee_coords_p1[d1].col = -1;
+			d1++;
+		}
+		while (d1 <= 11 && (bee_coords_p1[d1].row == -1 || bee_coords_p1[d1].col == -1))
+			d1++;
+		if (info->player == 1 && d1 >= 11)
+		{
+			coords_t dest2 = { 13, 3 };
+			return (calculate_distance(bee, dest2));
+		}			
+		coords_t dest = { bee_coords_p1[d1].row, bee_coords_p1[d1].col + flag };
+		return (calculate_distance(bee, dest));
+	}
+	if (info->bee == 4)
+	{
+		if (e1 != 14 && info->row == bee_coords_p1[e1].row && info->col == bee_coords_p1[e1].col)
+		{
+			bee_coords_p1[e1].row = -1;
+			bee_coords_p1[e1].col = -1;
+			e1++;
+		}
+		while (e1 < 14 && (bee_coords_p1[e1].row == -1 || bee_coords_p1[e1].col == -1))
+			e1++;
+		if (info->player == 1 && e1 == 14)
+		{
+			coords_t dest2 = { 14, 1 };
+			return (calculate_distance(bee, dest2));
+		}			
+		coords_t dest = { bee_coords_p1[e1].row, bee_coords_p1[e1].col + flag };
+		return (calculate_distance(bee, dest));
+	}
+	return (W);
+}
+
 dir_t	get_player_dir(agent_info_t *info, int hasflower)
 {
 	dir_t dir;
@@ -330,7 +431,12 @@ dir_t	get_player_dir(agent_info_t *info, int hasflower)
 		go_way = W;
 	int bee_pos_is_midmap = (info->col > 1 && info->col < 28);
 	if (hasflower == 0)
-		dir = get_mission(info);
+	{
+		if (info->player == 0)
+			dir = get_mission(info);
+		else
+			dir = get_mission_p1(info);
+	}
 	else
 	{
 		if (is_obstacle(*info))
