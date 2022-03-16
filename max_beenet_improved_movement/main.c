@@ -226,8 +226,6 @@ int	is_obstacle(agent_info_t info)
 	}
 	if (find_neighbour(info, OUTSIDE) >= 0)
 		return (2);
-	if (find_neighbour(info, WALL) >= 0)
-		return (3);
 	return (0);
 }
 
@@ -461,7 +459,7 @@ dir_t	get_player_dir(agent_info_t *info, int hasflower)
 		if (is_obstacle(*info) == 1)
 			return (go_way + (flag_dir[dir] * (info->player == 1)));
 		else if ((is_obstacle(*info) == 2))
-			return (rand() % 8);
+			return (rand() % 8);										///here we can implement the flag_dir to move away from the wall 100%
 		if (info->row > game.hivecords.row && bee_pos_is_midmap)
 			dir = NW + flag_dir[NW] * (info->player == 1);
 		else if (info->row < game.hivecords.row && bee_pos_is_midmap)
@@ -484,10 +482,17 @@ dir_t	build_wall_dir(agent_info_t *info)
 	dir_t dir = E + flag_dir[E] * (info->player == 1);
 	if (info->bee == 0)
 		dir = S;
+	/* else if (info->bee == 1)
+		dir = rand() % 8;
+	else if (info->bee == 2)
+		dir = rand() % 8;
+	else if (info->bee == 3)
+		dir = rand() % 8; */
 	else if (info->bee == 4)
 		dir = N;
 	return (dir);
 }
+
 
 command_t think(agent_info_t info)
 {
@@ -502,6 +507,27 @@ command_t think(agent_info_t info)
 		flower_cords[i].row = -1;
 	}
 	get_flowerpos(info);
+	int wall_dir = find_neighbour(info, WALL);
+	if (info.player == 1)
+	{
+		if (wall_dir >= 0 && info.col > 14) 	//destorys all walls on our own side
+		{
+			return (command_t) {
+					.action = GUARD,
+					.direction = wall_dir
+				};
+		}
+	}	
+	else
+	{
+		if (wall_dir >= 0 && info.col < 16) 	//destorys all walls on our own side
+		{
+			return (command_t) {
+					.action = GUARD,
+					.direction = wall_dir
+				};
+		}	
+	}
     if (is_bee_with_flower(bee))
     {
         int hive_dir = find_neighbour(info, hive_cell(info.player));
@@ -567,9 +593,9 @@ command_t think(agent_info_t info)
 	if (dir == -1)
 	{
 			return(command_t) {
-				.action = BUILD,
-				.direction = rand() % 8
-			};
+					.action = MOVE,
+					.direction = rand() % 8
+				};
 	}
 
 	return (command_t) {
