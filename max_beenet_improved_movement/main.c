@@ -103,7 +103,7 @@ coords_t	get_nearby_flower(int beenum)
 	{
 		if (beenum == 0)
 		{
-			if (flower_cords[i].row < 8 && flower_cords[i].col < 29)
+			if (flower_cords[i].row < 8 && flower_cords[i].col < 30)
 			{
 				cpycords.row = flower_cords[i].row;
 				cpycords.col = flower_cords[i].col;
@@ -114,7 +114,7 @@ coords_t	get_nearby_flower(int beenum)
 		}
 		else if (beenum == 1)
 		{
-			if (flower_cords[i].row < 10 && flower_cords[i].col >= 10 && flower_cords[i].col < 29)
+			if (flower_cords[i].row < 10 && flower_cords[i].col >= 10 && flower_cords[i].col < 30)
 			{
 				cpycords.row = flower_cords[i].row;
 				cpycords.col = flower_cords[i].col;
@@ -125,7 +125,7 @@ coords_t	get_nearby_flower(int beenum)
 		}
 		else if (beenum == 2)
 		{
-			if (flower_cords[i].row >= 8 && flower_cords[i].row <= 16 && flower_cords[i].col < 29)
+			if (flower_cords[i].row >= 8 && flower_cords[i].row <= 16 && flower_cords[i].col < 30)
 			{
 				cpycords.row = flower_cords[i].row;
 				cpycords.col = flower_cords[i].col;
@@ -136,7 +136,7 @@ coords_t	get_nearby_flower(int beenum)
 		}
 		else if (beenum == 3)
 		{
-			if (flower_cords[i].row > 14 && flower_cords[i].col >= 10 && flower_cords[i].col < 29)
+			if (flower_cords[i].row > 14 && flower_cords[i].col >= 10 && flower_cords[i].col < 30)
 			{
 				cpycords.row = flower_cords[i].row;
 				cpycords.col = flower_cords[i].col;
@@ -147,7 +147,7 @@ coords_t	get_nearby_flower(int beenum)
 		}
 		else if (beenum == 4)
 		{
-			if (flower_cords[i].row > 16 && flower_cords[i].col < 29)
+			if (flower_cords[i].row > 16 && flower_cords[i].col < 30)
 			{
 				cpycords.row = flower_cords[i].row;
 				cpycords.col = flower_cords[i].col;
@@ -482,12 +482,6 @@ dir_t	build_wall_dir(agent_info_t *info)
 	dir_t dir = E + flag_dir[E] * (info->player == 1);
 	if (info->bee == 0)
 		dir = S;
-	/* else if (info->bee == 1)
-		dir = rand() % 8;
-	else if (info->bee == 2)
-		dir = rand() % 8;
-	else if (info->bee == 3)
-		dir = rand() % 8; */
 	else if (info->bee == 4)
 		dir = N;
 	return (dir);
@@ -510,7 +504,7 @@ command_t think(agent_info_t info)
 	int wall_dir = find_neighbour(info, WALL);
 	if (info.player == 1)
 	{
-		if (wall_dir >= 0 && info.col > 14) 	//destorys all walls on our own side
+		if (wall_dir >= 0 && info.col > 14) 	//destorys all walls on our own side (maybe wrong priority to put it here?)
 		{
 			return (command_t) {
 					.action = GUARD,
