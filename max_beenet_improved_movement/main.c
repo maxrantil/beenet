@@ -228,7 +228,9 @@ int	is_obstacle(agent_info_t info)
 		return (2);
 	return (0);
 }
-
+/* 			 */
+/* 	PLAYER 0 */
+/* 			 */
 int a = 0, b = 3, c = 6, d = 9, e = 12;
 dir_t get_mission(agent_info_t *info)
 {
@@ -439,7 +441,7 @@ dir_t get_mission_p1(agent_info_t *info)
 
 dir_t	get_player_dir(agent_info_t *info, int hasflower)
 {
-	dir_t dir;
+	dir_t dir = -1;
 	int go_way;
 
 	if (info->player == 0)
@@ -575,19 +577,19 @@ command_t think(agent_info_t info)
 			};
 		}
 		bzero(enemy_cords, sizeof(enemy_cords));
-		if (get_enemypos(info))
+	/* 	if (get_enemypos(info))
 		{
 			coords_t bee = {info.row, info.col};
 			return (command_t) {
 				.action = MOVE,
 				.direction = calculate_distance(bee, enemy_cords[0])
 			};
-		}
+		} */
 	}
 	if (dir == -1)
 	{
 			return(command_t) {
-					.action = MOVE,
+					.action = BUILD,
 					.direction = rand() % 8
 				};
 	}
