@@ -237,10 +237,10 @@ dir_t get_mission(agent_info_t *info)
 	coords_t checkflower = get_nearby_flower(info->bee);
 	if (checkflower.col != -1 && checkflower.row != -1)
 		return (get_flower_dir(info, checkflower));
-  	if (is_obstacle(*info) == 1 && info->col < 15)
+  	if (is_obstacle(*info) >= 1 && info->col < 15)
 		return (printRandoms(0, 4, 1));
-	if (is_obstacle(*info) == 2 && info->col < 15)
-		return (E);
+	else if (is_obstacle(*info) == 2 && info->col > 15)
+		return (printRandoms(4, 7, 1));
 	if (info->bee == 0)
 	{
 		if (a != 2 && info->row == bee_coords[a].row && info->col == bee_coords[a].col)
@@ -340,10 +340,10 @@ dir_t get_mission_p1(agent_info_t *info)
 	coords_t checkflower = get_nearby_flower(info->bee);
 	if (checkflower.col != -1 && checkflower.row != -1)
 		return (get_flower_dir(info, checkflower));
-  	if (is_obstacle(*info) == 1 && info->col > 15)
+  	if (is_obstacle(*info) >= 1 && info->col > 15)
 		return (printRandoms(4, 7, 1));
-	if (is_obstacle(*info) == 2 && info->col > 15)
-		return (W);
+	if (is_obstacle(*info) == 2 && info->col < 15)
+		return (printRandoms(0, 4, 1));
 	if (info->bee == 0)
 	{
 		if (a1 != 2 && info->row == bee_coords_p1[a1].row && info->col == bee_coords_p1[a1].col)
