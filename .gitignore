@@ -1,3 +1,4 @@
+
 *.o
 src/arena
 src/libagent.a
@@ -7,3 +8,5 @@ bin
 *.log.gz
 __pycache__
 *.pyc
+max_beenet_improved_movement/agent
+agent
