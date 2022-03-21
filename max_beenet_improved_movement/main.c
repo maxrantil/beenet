@@ -163,7 +163,7 @@ coords_t	get_nearby_flower(int beenum)
 dir_t	calculate_distance(coords_t bee, coords_t dest)
 {
 		if (bee.row > dest.row && bee.col > dest.col)
-			return (NW);
+			return (rand() % 8);
 		else if (bee.row < dest.row && bee.col > dest.col)
 			return (SW);
 		else if (bee.row > dest.row && bee.col < dest.col)
@@ -577,19 +577,19 @@ command_t think(agent_info_t info)
 			};
 		}
 		bzero(enemy_cords, sizeof(enemy_cords));
-	/* 	if (get_enemypos(info))
+		if (get_enemypos(info))
 		{
 			coords_t bee = {info.row, info.col};
 			return (command_t) {
 				.action = MOVE,
 				.direction = calculate_distance(bee, enemy_cords[0])
 			};
-		} */
+		}
 	}
 	if (dir == -1)
 	{
 			return(command_t) {
-					.action = BUILD,
+					.action = MOVE,
 					.direction = rand() % 8
 				};
 	}
@@ -615,7 +615,7 @@ int main(int argc, char **argv)
 
     char *host = argv[1];
     int port = atoi(argv[2]);
-    char *team_name = "improved";
+    char *team_name = "Beenet";
 
     agent_main(host, port, team_name, think);
 }
